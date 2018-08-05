@@ -16,6 +16,7 @@
 package cn.indispensable.future.service;
 
 import cn.indispensable.future.dao.UserDao;
+import cn.indispensable.future.model.Ticket;
 import cn.indispensable.future.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,14 +24,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * user的service层 作为controller层和dao层的交互媒介 提供相关的服务
- * 仅做测试使用 代码实际应按照功能提供service层类
+ * 登录页面对应service
  * @author cicicc
  * @since 0.0.1
  */
 @Service
-@Deprecated
-public class UserService {
+public class LoginService {
+
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     @Autowired
     UserDao userDao;
@@ -40,4 +40,8 @@ public class UserService {
         return userDao.selectUserById(userId);
     }
 
+    public Ticket selectUserByPassword(String username, String password) {
+
+        return null;
+    }
 }

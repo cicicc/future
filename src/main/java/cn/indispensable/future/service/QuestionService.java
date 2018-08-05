@@ -24,10 +24,12 @@ import java.util.List;
 
 /**
  * question的Service层
+ * 仅做测试使用 代码实际应按照功能提供service层类
  * @author cicicc
  * @since 0.1.1
  */
 @Service
+@Deprecated
 public class QuestionService {
     @Autowired
     private QuestionDao questionDao;

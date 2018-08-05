@@ -59,7 +59,7 @@ public class InitDataTest {
             //随机创建问题数据
             Question question = new Question();
             question.setTitle("A randomly generated test title, please don't worry about this"+i);
-            date.setTime(date.getTime() + 1000 * 3600 * 5 * i);
+            date.setTime(date.getTime() + 1000 * 3600 * random.nextInt(50) * i);
             question.setCreatedDate(date);
             question.setUserId(i+1);
             question.setContent("为了使这一段文字看起来足够的长,"+random.nextDouble()+"以便能够满足文章获得摘要的需求,我就这样瞎写了一堆东西.然后进行复制.为了使这一段文字看起来足够的长,以便能够满足文章获得摘要的需求,我就这样瞎写了一堆东西.然后进行复制.为了使这一段文字看起来足够的长,以便能够满足文章获得摘要的需求,我就这样瞎写了一堆东西.然后进行复制.");

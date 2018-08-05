@@ -15,23 +15,29 @@
  */
 package cn.indispensable.future.service;
 
+import cn.indispensable.future.dao.QuestionDao;
 import cn.indispensable.future.dao.UserDao;
+import cn.indispensable.future.model.Question;
 import cn.indispensable.future.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
- * user的service层 作为controller层和dao层的交互媒介 提供相关的服务
- * 仅做测试使用 代码实际应按照功能提供service层类
+ * 首页对应的service层数据
  * @author cicicc
- * @since 0.0.1
+ * @since 0.0.2
  */
 @Service
-@Deprecated
-public class UserService {
+public class HomeService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+    @Autowired
+    private QuestionDao questionDao;
+
     @Autowired
     UserDao userDao;
 
@@ -40,4 +46,7 @@ public class UserService {
         return userDao.selectUserById(userId);
     }
 
+    public List<Question> selectLatestQuestions(int userId, int offset, int limit){
+        return questionDao.selectLatestQuestions(userId, offset, limit);
+    }
 }

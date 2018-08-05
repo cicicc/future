@@ -20,6 +20,6 @@ public interface UserDao {
     @Insert({"insert into", TABLE_NAME, "(", INSERT_FILEDS, ") values(#{name}, #{password}, #{salt}, #{headUrl})"})
     int addUser(User user);
 
-    @Select({"select ",SELECT_FILEDS,"from ",TABLE_NAME,"where id=#{id}"})
+    @Select({"select ",INSERT_FILEDS,"from ",TABLE_NAME,"where id=#{id}"})
     User selectUserById(int userId);
 }
