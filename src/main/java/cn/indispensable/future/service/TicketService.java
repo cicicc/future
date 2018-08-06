@@ -15,26 +15,34 @@
  */
 package cn.indispensable.future.service;
 
-import cn.indispensable.future.DAO.QuestionDAO;
-import cn.indispensable.future.model.Question;
+import cn.indispensable.future.DAO.LoginTicketDAO;
+import cn.indispensable.future.model.LoginTicket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.UUID;
 
 /**
- * question的Service层
- * 仅做测试使用 代码实际应按照功能提供service层类
+ * 为登录用户生成了的cookie信息
  * @author cicicc
- * @since 0.1.1
+ * @since 0.0.1
  */
 @Service
-@Deprecated
-public class QuestionService {
-    @Autowired
-    private QuestionDAO questionDao;
+public class TicketService {
 
-    public List<Question> selectLatestQuestions(int userId,int offset, int limit){
-        return questionDao.selectLatestQuestions(userId, offset, limit);
+    @Autowired
+    private LoginTicketDAO ticketDAO;
+
+    /**
+     * 向ticket数据库中添加一条ticket数据,并将ticket数据返回给controller层,以便controller层将数据放入cookie中
+     * @param userId 用户id
+     * @return LoginTicket
+     */
+    public LoginTicket addTicket(int userId) {
+        LoginTicket loginTicket = new LoginTicket();
+        loginTicket.setUserId(userId);
+        loginTicket.setTicket(UUID.randomUUID().toString().replace("-",""));
+        ticketDAO.addLoginTicket(loginTicket);
+        return loginTicket;
     }
 }

@@ -15,13 +15,15 @@
  */
 package cn.indispensable.future.service;
 
-import cn.indispensable.future.dao.UserDao;
-import cn.indispensable.future.model.Ticket;
+import cn.indispensable.future.DAO.UserDAO;
 import cn.indispensable.future.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 登录页面对应service
@@ -31,17 +33,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginService.class);
     @Autowired
-    UserDao userDao;
+    UserDAO userDAO;
 
     public User selectUserById(int userId){
 
-        return userDao.selectUserById(userId);
+        return userDAO.selectUserById(userId);
     }
 
-    public Ticket selectUserByPassword(String username, String password) {
 
-        return null;
+    public Map<String, Object> selectUserByNameAndPass(String username, String password) {
+        User user = userDAO.selectUserByNameAndPass(username, password);
+        Map<String, Object> map = new HashMap<>();
+        if (user == null) {
+            //如果未查询到这个用户的话,将错误信息封装到map中返回给controller层进行处理
+            map.put("msg", "您输入的用户名或密码错误");
+        }else{
+            map.put("user", user);
+        }
+        return map;
     }
 }

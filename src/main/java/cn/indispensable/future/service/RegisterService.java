@@ -15,26 +15,38 @@
  */
 package cn.indispensable.future.service;
 
-import cn.indispensable.future.DAO.QuestionDAO;
-import cn.indispensable.future.model.Question;
+import cn.indispensable.future.DAO.UserDAO;
+import cn.indispensable.future.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * question的Service层
- * 仅做测试使用 代码实际应按照功能提供service层类
+ * 注册的service层
  * @author cicicc
- * @since 0.1.1
+ * @since 0.0.1
+ *
  */
 @Service
-@Deprecated
-public class QuestionService {
-    @Autowired
-    private QuestionDAO questionDao;
+public class RegisterService {
 
-    public List<Question> selectLatestQuestions(int userId,int offset, int limit){
-        return questionDao.selectLatestQuestions(userId, offset, limit);
+    @Autowired
+    private UserDAO userDAO;
+
+    /**
+     * 查找用户名在数据库中是否存在
+     * @param username 用户姓名
+     * @return  Map<String,Object>
+     */
+    public Map<String,Object> selectUserByName(String username) {
+        Map<String, Object> map = new HashMap<>();
+        User user = userDAO.selectUserByName(username);
+        if (user != null) {
+            //返回页面用户名已经被占用的信息
+            map.put("msg", "此用户名已被占用");
+        }
+        return map;
     }
 }

@@ -15,8 +15,8 @@
  */
 package cn.indispensable.future.service;
 
-import cn.indispensable.future.dao.QuestionDao;
-import cn.indispensable.future.dao.UserDao;
+import cn.indispensable.future.DAO.QuestionDAO;
+import cn.indispensable.future.DAO.UserDAO;
 import cn.indispensable.future.model.Question;
 import cn.indispensable.future.model.User;
 import org.slf4j.Logger;
@@ -36,10 +36,10 @@ public class HomeService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
-    private QuestionDao questionDao;
+    private QuestionDAO questionDao;
 
     @Autowired
-    UserDao userDao;
+    UserDAO userDao;
 
     public User selectUserById(int userId){
 

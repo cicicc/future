@@ -15,7 +15,7 @@
  */
 package cn.indispensable.future.service;
 
-import cn.indispensable.future.dao.UserDao;
+import cn.indispensable.future.DAO.UserDAO;
 import cn.indispensable.future.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     @Autowired
-    UserDao userDao;
+    UserDAO userDao;
 
     public User selectUserById(int userId){
 

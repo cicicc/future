@@ -22,7 +22,7 @@ import java.util.Date;
  * @author cicicc
  * @since 0.0.1
  */
-public class Ticket {
+public class LoginTicket {
 
     private int id; //ticket id
     private int userId; //登录用户id
@@ -30,7 +30,9 @@ public class Ticket {
     private Date expired; //过期时间
     private int status; //状态 0:正常使用 1:过期
 
-    public Ticket() {
+    public LoginTicket() {
+        this.status = 0;
+        this.expired = new Date();
     }
 
     public int getId() {

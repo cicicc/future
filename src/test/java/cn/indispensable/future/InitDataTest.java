@@ -15,8 +15,8 @@
  */
 package cn.indispensable.future;
 
-import cn.indispensable.future.dao.QuestionDao;
-import cn.indispensable.future.dao.UserDao;
+import cn.indispensable.future.DAO.QuestionDAO;
+import cn.indispensable.future.DAO.UserDAO;
 import cn.indispensable.future.model.Question;
 import cn.indispensable.future.model.User;
 import org.junit.Test;
@@ -40,9 +40,9 @@ import java.util.Random;
 public class InitDataTest {
     //这个实际上是可以注入的 但是IDEA提示无法注入 所以把这个错误屏蔽掉吧
     @Autowired
-    UserDao userDao;
+    UserDAO userDao;
     @Autowired
-    QuestionDao questionDao;
+    QuestionDAO questionDao;
 
 
     @Test
