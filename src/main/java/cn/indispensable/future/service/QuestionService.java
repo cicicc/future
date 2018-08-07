@@ -29,7 +29,6 @@ import java.util.List;
  * @since 0.1.1
  */
 @Service
-@Deprecated
 public class QuestionService {
     @Autowired
     private QuestionDAO questionDao;

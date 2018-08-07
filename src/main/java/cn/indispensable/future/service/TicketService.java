@@ -20,10 +20,13 @@ import cn.indispensable.future.model.LoginTicket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
  * 为登录用户生成了的cookie信息
+ * 取出登录和注册的共调用方法,不够合理
  * @author cicicc
  * @since 0.0.1
  */
@@ -38,11 +41,40 @@ public class TicketService {
      * @param userId 用户id
      * @return LoginTicket
      */
-    public LoginTicket addTicket(int userId) {
+    public LoginTicket addTicket(int userId,boolean rememberme) {
         LoginTicket loginTicket = new LoginTicket();
         loginTicket.setUserId(userId);
         loginTicket.setTicket(UUID.randomUUID().toString().replace("-",""));
         ticketDAO.addLoginTicket(loginTicket);
+        Date date = new Date();
+        if (rememberme) {
+            date.setTime(date.getTime() + 1000L * 3600 * 24 * 60);
+        } else {
+            date.setTime(date.getTime() + 1000L * 3600 * 24 * 15);
+        }
+        loginTicket.setExpired(date);
         return loginTicket;
     }
+
+    /**
+     * 通过用户id查询此用户是否已在数据库中存在为状态为0的ticket
+     * 如果存在,将其状态设为1
+     * @param userId 用户id
+     */
+    public void updateTicketStatusByUserId(int userId) {
+        List<LoginTicket> ticketList = ticketDAO.selectTicketByIdAndStatus(userId, 0);
+        if (ticketList != null && ticketList.size() > 0) {
+            for (LoginTicket ticket : ticketList) {
+                ticketDAO.updateTicketStatusById(ticket.getId(), 1);
+            }
+        }
+    }
+    /**
+     * 登出
+     * @param ticket cookie中的ticket值
+     */
+    public void loginout(String ticket) {
+        ticketDAO.updateTicketStatus(ticket, 1);
+    }
+
 }

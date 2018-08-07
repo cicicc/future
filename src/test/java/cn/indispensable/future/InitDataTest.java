@@ -19,6 +19,7 @@ import cn.indispensable.future.DAO.QuestionDAO;
 import cn.indispensable.future.DAO.UserDAO;
 import cn.indispensable.future.model.Question;
 import cn.indispensable.future.model.User;
+import cn.indispensable.future.utils.MD5Util;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  *测试类 给数据库添加数据
@@ -53,7 +55,8 @@ public class InitDataTest {
             Random random = new Random();
             Date date = new Date();
             user.setName("user"+i);
-            user.setPassword(String.format("pass%f", random.nextFloat()));
+            user.setSalt(UUID.randomUUID().toString().replace("-", "").substring(0,10));
+            user.setPassword(MD5Util.MD5(String.format("pass%f", random.nextFloat())+user.getSalt()));
             user.setHeadUrl(String.format("http://images.nowcoder.com/head/%dt.png", random.nextInt(1000)));
             userDao.addUser(user);
             //随机创建问题数据

@@ -6,10 +6,10 @@ import org.slf4j.LoggerFactory;
 import java.security.MessageDigest;
 
 /**
- * future项目的工具类 由于项目暂时比较小 所以并没有对工具类做过多的细化
+ * 提供MD5加密的工具类
  */
-public class FutureUtils {
-    private static final Logger logger = LoggerFactory.getLogger(FutureUtils.class);
+public class MD5Util {
+    private static final Logger logger = LoggerFactory.getLogger(MD5Util.class);
 
     /**
      * 使用MD5算法进行加密

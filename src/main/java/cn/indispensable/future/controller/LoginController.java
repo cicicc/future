@@ -17,13 +17,13 @@ package cn.indispensable.future.controller;
 
 import cn.indispensable.future.model.LoginTicket;
 import cn.indispensable.future.model.User;
-import cn.indispensable.future.service.LoginService;
-import cn.indispensable.future.service.RegisterService;
 import cn.indispensable.future.service.TicketService;
+import cn.indispensable.future.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,11 +44,9 @@ import java.util.Map;
 public class LoginController {
 
     @Autowired
-    private LoginService loginService;
-    @Autowired
     private TicketService ticketService;
     @Autowired
-    private RegisterService registerService;
+    private UserService userService;
 
     @RequestMapping(path = {"/register", "/login"})
     public String toLogin() {
@@ -75,19 +73,21 @@ public class LoginController {
         // 这两个if在前端中就应该进行判断
         if ( StringUtils.isEmpty(username)) {
             model.addAttribute("msg", "请输入用户名");
-            return "redirect:/login";
+            return "login";
         }else if (StringUtils.isEmpty(password)) {
             model.addAttribute("msg", "请输入密码");
-            return "redirect:/login";
+            return "login";
         }else{
             //用户并未输入空字符串或未输入数据作为用户名和密码
-            Map<String, Object> map = loginService.selectUserByNameAndPass(username, password);
+            Map<String, Object> map = userService.selectUserByNameAndPass(username, password);
             if (map.containsKey("msg")) {
                 //用户名或者密码输入错误
                 model.addAttribute("msg", map.get("msg"));
-                return "redirect:/login";
+                return "login";
             } else {
+                //用户的用户名和密码输入正确以后,我们还应该去数据库中查看之前有没有此用户的ticket信息,将其状态设为1(即无效)
                 User user = (User) map.get("user");
+                ticketService.updateTicketStatusByUserId(user.getId());
                 addTicket(user, rememberme, response);
                 if (next != null) {
                     //这里应该对next进行判断,因为在一般的情况下我们并不希望用户提交的next路径是非本站的
@@ -110,26 +110,25 @@ public class LoginController {
      */
     @RequestMapping(path = {"/register/"},method = {RequestMethod.POST})
     public String register(Model model, @RequestParam("username")String username,
-                        @RequestParam("password")String password,
-                           @RequestParam("next")String next,
+                        @RequestParam("password")String password, @RequestParam(value = "next",required = false)String next,
                         @RequestParam(value = "rememberme",defaultValue = "false")boolean rememberme,
                         HttpServletResponse response){
         // 这两个if在前端中就应该进行判断
         if ( StringUtils.isEmpty(username)) {
             model.addAttribute("msg", "请输入用户名");
-            return "redirect:/register";
+            return "register";
         }else if (StringUtils.isEmpty(password)) {
             model.addAttribute("msg", "请输入密码");
-            return "redirect:/register";
+            return "/register";
         }else{
             //判断用户名是否被占用
-            Map<String, Object> map = registerService.selectUserByName(username);
+            Map<String, Object> map = userService.selectUserByName(username);
             if (map.containsKey("msg")) {
                 //用户名已经存在
                 model.addAttribute("msg", map.get("msg"));
-                return "redirect:/register";
+                return "/register";
             } else {
-                User user = (User) map.get("user");
+               User user = userService.addUser (username, password);
                 addTicket(user, rememberme, response);
                 if (next != null) {
                     //这里应该对next进行判断,因为在一般的情况下我们并不希望用户提交的next路径是非本站的
@@ -142,12 +141,23 @@ public class LoginController {
     }
 
     /**
+     * 登出
+     * @return 默认返回到首页
+     */
+    @RequestMapping(path = {"/loginout"})
+    public String register(@CookieValue(name = "ticket",required = false)String ticket){
+        if (ticket != null) {
+            ticketService.loginout(ticket);
+        }
+        return "redirect:/index";
+    }
+    /**
      * 公共方法 添加ticket
      */
     private void addTicket(User user, boolean rememberme, HttpServletResponse response) {
 
         //获得ticket,由response传递回浏览器
-        LoginTicket loginTicket = ticketService.addTicket(user.getId());
+        LoginTicket loginTicket = ticketService.addTicket(user.getId(),rememberme);
         Cookie ticketCookie = new Cookie("ticket", loginTicket.getTicket());
         ticketCookie.setPath("/");
         //判断用户是否选择了记住我,两者的cookie信息保存时间不同

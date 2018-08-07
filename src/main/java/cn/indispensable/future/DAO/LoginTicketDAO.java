@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.indispensable.future.dao;
+package cn.indispensable.future.DAO;
 
-import cn.indispensable.future.model.Question;
+import cn.indispensable.future.model.LoginTicket;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
 import java.util.List;
 
 /**
@@ -28,17 +29,28 @@ import java.util.List;
  * @since 0.0.1
  */
 @Mapper
-public interface QuestionDao {
-    String TABLE_NAME = "question";
-    String INSERT_FILEDS = " title, content, user_id, created_date, comment_count ";
-    String SELECT_FILEDS = "id" + INSERT_FILEDS;
+public interface LoginTicketDAO {
 
-    @Insert({"insert into", TABLE_NAME, "(", INSERT_FILEDS, ") values(#{title}, #{content}, #{userId}, #{createdDate}, #{commentCount})"})
-    int addQuestion(Question question);
+    String TABLE_NAME = "login_ticket";
+    String INSERT_FIELDS = " user_id, ticket, expired, status ";
+    String SELECT_FIELDS = "id," + INSERT_FIELDS;
 
-    @Select({"select ",SELECT_FILEDS,"from ",TABLE_NAME})
-    Question selectQuestionById(int QuestionId);
+    @Insert({"insert into", TABLE_NAME, "(", INSERT_FIELDS, ") values(#{userId}, #{ticket}, #{expired}, #{status})"})
+    int addLoginTicket(LoginTicket loginTicket);
 
-    List<Question> selectLatestQuestions(@Param("userId") int userId, @Param("offset") int offset,
-                                         @Param("limit") int limit);
+    @Select({"select ",SELECT_FIELDS,"from ",TABLE_NAME})
+    LoginTicket selectLoginTicketById(int LoginTicketId);
+
+    @Select({"select ",SELECT_FIELDS,"from ",TABLE_NAME, "where user_id=#{0} and status=#{1}"})
+    List<LoginTicket> selectTicketByIdAndStatus(int userId, int i);
+
+    @Update({"update ",TABLE_NAME,"set status = #{1} where id=#{0}"})
+    void updateTicketStatusById(int id, int status);
+
+    /**
+     * 此处存在一个bug,ticket可能重复,并且根据ticket查找效率较低,可以考虑下个版本重构
+     */
+    @Update({"update ",TABLE_NAME,"set status = #{1} where ticket=#{0}"})
+    void updateTicketStatus(String ticket, int status);
+
 }
