@@ -69,6 +69,16 @@ public class TicketService {
             }
         }
     }
+
+    /**
+     * 根据ticket值查询用户的登录票(loginTicket)
+     * @param ticket ticket的值
+     * @return LoginTicket
+     */
+    public LoginTicket selectLoginTicketByTicket(String ticket) {
+        return ticketDAO.selectByTicket(ticket);
+
+    }
     /**
      * 登出
      * @param ticket cookie中的ticket值

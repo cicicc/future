@@ -44,6 +44,9 @@ public interface LoginTicketDAO {
     @Select({"select ",SELECT_FIELDS,"from ",TABLE_NAME, "where user_id=#{0} and status=#{1}"})
     List<LoginTicket> selectTicketByIdAndStatus(int userId, int i);
 
+    @Select({"select ",SELECT_FIELDS,"from ",TABLE_NAME, "where ticket=#{ticket}"})
+    LoginTicket selectByTicket(String ticket);
+
     @Update({"update ",TABLE_NAME,"set status = #{1} where id=#{0}"})
     void updateTicketStatusById(int id, int status);
 
