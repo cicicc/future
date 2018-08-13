@@ -45,7 +45,6 @@ public class TicketService {
         LoginTicket loginTicket = new LoginTicket();
         loginTicket.setUserId(userId);
         loginTicket.setTicket(UUID.randomUUID().toString().replace("-",""));
-        ticketDAO.addLoginTicket(loginTicket);
         Date date = new Date();
         if (rememberme) {
             date.setTime(date.getTime() + 1000L * 3600 * 24 * 60);
@@ -53,6 +52,7 @@ public class TicketService {
             date.setTime(date.getTime() + 1000L * 3600 * 24 * 15);
         }
         loginTicket.setExpired(date);
+        ticketDAO.addLoginTicket(loginTicket);
         return loginTicket;
     }
 

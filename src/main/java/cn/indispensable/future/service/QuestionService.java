@@ -17,23 +17,41 @@ package cn.indispensable.future.service;
 
 import cn.indispensable.future.DAO.QuestionDAO;
 import cn.indispensable.future.model.Question;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
 /**
  * question的Service层
- * 仅做测试使用 代码实际应按照功能提供service层类
  * @author cicicc
  * @since 0.1.1
  */
 @Service
 public class QuestionService {
+
+    private static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
     @Autowired
     private QuestionDAO questionDao;
 
     public List<Question> selectLatestQuestions(int userId,int offset, int limit){
         return questionDao.selectLatestQuestions(userId, offset, limit);
+    }
+
+    /**
+     * 对要添加的问题进行相应的处理,比如敏感词的过滤等,并调用dao层将数据保存到数据库中
+     * @param question 包含着问题相关信息的question对象
+     * @return 成功返回大于1的数(正常来说是1)
+     */
+    public int addQuestion(Question question) {
+        //过滤敏感词
+        question.setTitle(HtmlUtils.htmlEscape(question.getTitle()));
+        question.setContent(HtmlUtils.htmlEscape(question.getContent()));
+
+        return 0;
+
     }
 }

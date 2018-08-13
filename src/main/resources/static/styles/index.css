@@ -154,8 +154,8 @@ html.touchevents a:hover {
 object:not([data]) {
     display: none
 }[hidden] {
-    display: none!important
-}
+     display: none!important
+ }
 
 .zg-warn-message,.zg-error-message,.zg-info-message {
     margin: 10px 0;
@@ -254,8 +254,8 @@ object:not([data]) {
     clip: rect(0,0,0,0);
     border: 0
 }[ng-cloak] {
-    display: none
-}
+     display: none
+ }
 
 body.zhi {
     padding-top: 46px;
@@ -2016,8 +2016,8 @@ html.no-touchevents .meta-item:hover .z-icon-comment {
     color: #fff!important;
     /*text-shadow: 0 1px 0 #fff;*/
     background: #25bb9b;
-/*    background: -webkit-linear-gradient(top,#25bb9b,#00B091);
-    background: linear-gradient(to bottom,#25bb9b,#00B091);*/
+    /*    background: -webkit-linear-gradient(top,#25bb9b,#00B091);
+        background: linear-gradient(to bottom,#25bb9b,#00B091);*/
     /*border: 1px solid #bbb;*/
     box-shadow: 0 1px 0 #fff inset,0 1px 0 rgba(0,0,0,.1)
 }
@@ -2363,9 +2363,9 @@ html.no-touchevents .tab-navs .tab-nav>a:hover {
         min-width: initial
     }
 }[class*=sprite-global-icon-] {
-    display: inline-block;
-    vertical-align: middle
-}
+     display: inline-block;
+     vertical-align: middle
+ }
 
 .sprite-global,[class*=sprite-global-] {
     background-image: url(../images/img/sprites.auto.915a539c.png);
@@ -5554,9 +5554,9 @@ html.no-touchevents .actioncard-button:hover {
         display: none
     }
 }[class*=sprite-topstory-icon-] {
-    display: inline-block;
-    vertical-align: middle
-}
+     display: inline-block;
+     vertical-align: middle
+ }
 
 .sprite-topstory,[class*=sprite-topstory-] {
     background-image: url(../images/img/topstory/sprites.auto.ebf39759.png);
@@ -5844,7 +5844,8 @@ h2+.meta {
 }
 
 .feed-main {
-    margin-left: 48px
+    margin-left: 48px;
+    position: relative;
 }
 
 .feed-main>.title {
@@ -5856,7 +5857,7 @@ h2+.meta {
 }
 
 .feed-item .entry-body {
-    position: relative
+    /*position: relative*/
 }
 
 .entry-body .zm-item-vote,.zm-item-answer .zm-item-vote,.zm-item-feed .zm-item-vote,.zm-item-answer .zm-item-answer-summary {
@@ -6766,9 +6767,9 @@ html.no-touchevents .bordered-block-menu-link:hover .bordered-block-menu-text {
         margin-top: 106px
     }
 }[class*=sprite-topic-exprience-icon-] {
-    display: inline-block;
-    vertical-align: middle
-}
+     display: inline-block;
+     vertical-align: middle
+ }
 
 .sprite-topic-exprience,[class*=sprite-topic-exprience-] {
     background-image: url(../images/img/topic-exprience/sprites.auto.7b1b5bb9.png);
@@ -10255,7 +10256,7 @@ html.no-touchevents .zu-top-nav-userinfo:hover {
 .topnav-noauth {
     float: right;
     margin: 0 0 0 15px;
-    line-height: 46px
+    line-height: 45px
 }
 
 .topnav-noauth .zg-icon {
@@ -10267,8 +10268,8 @@ html.no-touchevents .zu-top-nav-userinfo:hover {
 .topnav-noauth a {
     padding: 0 10px;
     width: auto;
-    height: 46px;
-    line-height: 46px;
+    height: 45px;
+    line-height: 45px;
     text-align: center;
     display: block;
     color: #eee;
@@ -10286,9 +10287,9 @@ html.no-touchevents .zu-top-nav-userinfo:hover {
     float: left;
     list-style: none
 }[class*=sprite-sidebar-icon-] {
-    display: inline-block;
-    vertical-align: middle
-}
+     display: inline-block;
+     vertical-align: middle
+ }
 
 .sprite-sidebar,[class*=sprite-sidebar-] {
     background-image: url(../images/img/sidebar/sprites.auto.84426159.png);
@@ -15664,7 +15665,8 @@ html.no-touchevents .zm-item-vote-count:hover {
 .zm-item-vote {
     display: none;
     position: absolute;
-    left: -48px
+    left: -48px;
+    top: 50px;
 }
 
 .zm-votebar {

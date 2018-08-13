@@ -19,7 +19,7 @@ import cn.indispensable.future.DAO.QuestionDAO;
 import cn.indispensable.future.DAO.UserDAO;
 import cn.indispensable.future.model.Question;
 import cn.indispensable.future.model.User;
-import cn.indispensable.future.utils.MD5Util;
+import cn.indispensable.future.utils.MD5Utils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,7 @@ public class InitDataTest {
             Date date = new Date();
             user.setName("user"+i);
             user.setSalt(UUID.randomUUID().toString().replace("-", "").substring(0,10));
-            user.setPassword(MD5Util.MD5(String.format("pass%f", random.nextFloat())+user.getSalt()));
+            user.setPassword(MD5Utils.MD5(String.format("pass%f", random.nextFloat())+user.getSalt()));
             user.setHeadUrl(String.format("http://images.nowcoder.com/head/%dt.png", random.nextInt(1000)));
             userDao.addUser(user);
             //随机创建问题数据

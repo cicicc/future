@@ -49,8 +49,8 @@ public class LoginController {
     private UserService userService;
 
     @RequestMapping(path = {"/register", "/login"})
-    public String toLogin() {
-
+    public String toLogin(Model model, @RequestParam(value = "next", required = false) String next) {
+        model.addAttribute("next", next);
         return "login";
     }
 
@@ -89,14 +89,14 @@ public class LoginController {
                 User user = (User) map.get("user");
                 ticketService.updateTicketStatusByUserId(user.getId());
                 addTicket(user, rememberme, response);
-                if (next != null) {
+                if (!StringUtils.isEmpty(next)) {
                     //这里应该对next进行判断,因为在一般的情况下我们并不希望用户提交的next路径是非本站的
                     //因为这样的话,如果有人设置了链接指向自己的网站的话,就可以直接获取到我们用户的cookie信息了
-                    return "redirect:/" + next;
+                    return "redirect:" + next;
                 }
             }
         }
-        return "index";
+        return "redirect:/index";
     }
     /**
      * 用户提交注册数据 经由这个表单,仅可以进行post提交
@@ -151,6 +151,7 @@ public class LoginController {
         }
         return "redirect:/index";
     }
+
     /**
      * 公共方法 添加ticket
      */
@@ -168,6 +169,5 @@ public class LoginController {
         }
         response.addCookie(ticketCookie);
     }
-
 
 }

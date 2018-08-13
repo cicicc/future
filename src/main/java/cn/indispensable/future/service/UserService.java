@@ -15,10 +15,9 @@
  */
 package cn.indispensable.future.service;
 
-import cn.indispensable.future.DAO.LoginTicketDAO;
 import cn.indispensable.future.DAO.UserDAO;
 import cn.indispensable.future.model.User;
-import cn.indispensable.future.utils.MD5Util;
+import cn.indispensable.future.utils.MD5Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +42,7 @@ public class UserService {
     public Map<String, Object> selectUserByNameAndPass(String username, String password) {
         User user = userDAO.selectUserByName(username);
         Map<String, Object> map = new HashMap<>();
-        if (user.getPassword().equals(MD5Util.MD5(password + user.getSalt()))) {
+        if (user.getPassword().equals(MD5Utils.MD5(password + user.getSalt()))) {
             map.put("user", user);
         }else{
             //如果查询的条件不满足,将错误信息封装到map中返回给controller层进行处理
@@ -81,7 +80,7 @@ public class UserService {
         User user = new User();
         user.setName(username);
         user.setSalt(UUID.randomUUID().toString().replace("-","").substring(0,10));
-        user.setPassword(MD5Util.MD5(password+user.getSalt()));
+        user.setPassword(MD5Utils.MD5(password+user.getSalt()));
         user.setHeadUrl(String.format("http://images.nowcoder.com/head/%dt.png", new Random().nextInt(1000)));
         userDAO.addUser(user);
         return user;

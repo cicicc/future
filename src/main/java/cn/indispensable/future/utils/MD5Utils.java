@@ -8,8 +8,8 @@ import java.security.MessageDigest;
 /**
  * 提供MD5加密的工具类
  */
-public class MD5Util {
-    private static final Logger logger = LoggerFactory.getLogger(MD5Util.class);
+public class MD5Utils {
+    private static final Logger logger = LoggerFactory.getLogger(MD5Utils.class);
 
     /**
      * 使用MD5算法进行加密
