@@ -15,9 +15,16 @@
  */
 package cn.indispensable.future.service;
 
+import org.apache.commons.lang.CharUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,12 +35,9 @@ import java.util.Map;
  */
 @Service
 public class SensitiveService implements InitializingBean {
+    private static final Logger logger = LoggerFactory.getLogger(SensitiveService.class);
 
-   //加载配置文件
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        
-    }
+
 
     //设置默认敏感词替换符号
     private final static String DEFAULT_REPLACE_CONTENT = "***";
@@ -64,8 +68,85 @@ public class SensitiveService implements InitializingBean {
         void setKeyWordEnd(Boolean end) {
             this.end = end;
         }
+        //获取当前节点的子节点数目
+        public int getSubNodeCount() {
+            return subNodes.size();
+        }
 
     }
 
+    //创建一个根节点
+    private TrieNode rootNode = new TrieNode();
+
+    /**
+     * 判断是否是一个符号
+     */
+    private boolean isSymbol(char c) {
+        int ic = (int) c;
+        // 0x2E80-0x9FFF 东亚文字范围
+        return !CharUtils.isAsciiAlphanumeric(c) && (ic < 0x2E80 || ic > 0x9FFF);
+    }
+
+
+    //加载配置文件,敏感词文件
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        rootNode = new TrieNode();
+        try {
+            InputStream is = Thread.currentThread().getContextClassLoader()
+                    .getResourceAsStream("SensitiveWords.txt");
+            InputStreamReader read = new InputStreamReader(is);
+            BufferedReader bufferedReader = new BufferedReader(read);
+            String lineText;
+            while ((lineText = bufferedReader.readLine()) != null) {
+                lineText = lineText.trim();
+                addWord(lineText);
+            }
+            read.close();
+        } catch (Exception e) {
+            logger.error("读取敏感词文件失败" + e.getMessage());
+        }
+    }
+
+    /**
+     * 将敏感词添加到敏感词所构成的前缀树中
+     * @param lineText 读取到的敏感词
+     */
+    private void addWord(String lineText) {
+        //创建一个指针指向根节点
+        TrieNode templateTrieNode = rootNode;
+        //循环传递过来的文本内容 将数据添加到前缀树
+        for (int i = 0; i < lineText.length(); i++) {
+            Character c = lineText.charAt(i);
+            //如果当前循环到的字符不是中英文字符,那么就跳过这个字符
+            if (!isSymbol(c)) {
+                continue;
+            }
+            //试图寻找子节点是否包括现在遍历的节点
+            TrieNode subNode = templateTrieNode.getSubNode(c);
+            if (subNode==null){
+                //如果不存在此节点的话,就新建一个
+                subNode = new TrieNode();
+                templateTrieNode.addSubNode(c, subNode);
+            }
+            //继续向下进行延伸
+            templateTrieNode = subNode;
+            //判断是否已经到了敏感词结尾,如果到了结尾的话就将其end标签设为true
+            if (i == lineText.length() - 1) {
+                templateTrieNode.setKeyWordEnd(true);
+            }
+        }
+    }
+
+    /**
+     * 过滤敏感词
+     * @param text 要过滤的文本
+     * @return 过滤以后的结果
+     */
+    public String filter(String text) {
+         
+
+        return null;
+    }
 
 }
