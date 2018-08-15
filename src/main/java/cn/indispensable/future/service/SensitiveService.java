@@ -40,7 +40,7 @@ public class SensitiveService implements InitializingBean {
 
 
     //设置默认敏感词替换符号
-    private final static String DEFAULT_REPLACE_CONTENT = "***";
+    private final static String DEFAULT_REPLACE_CONTENT = "*";
 
     //前缀树的节点
     private class TrieNode{
@@ -50,12 +50,12 @@ public class SensitiveService implements InitializingBean {
         private Map<Character, TrieNode> subNodes = new HashMap<>();
 
         //添加子节点
-        public void addSubNode(Character key, TrieNode node) {
+        void addSubNode(Character key, TrieNode node) {
             subNodes.put(key, node);
         }
 
         //查询当前指向的节点下面是否有key值为所查询值的子节点
-        public TrieNode getSubNode(Character key) {
+        TrieNode getSubNode(Character key) {
             return subNodes.get(key);
         }
 
@@ -69,7 +69,7 @@ public class SensitiveService implements InitializingBean {
             this.end = end;
         }
         //获取当前节点的子节点数目
-        public int getSubNodeCount() {
+         int getSubNodeCount() {
             return subNodes.size();
         }
 
@@ -144,7 +144,33 @@ public class SensitiveService implements InitializingBean {
      * @return 过滤以后的结果
      */
     public String filter(String text) {
-         
+        if (StringUtils.isEmpty(text)) {
+            return text;
+        }
+        String replaceContent = DEFAULT_REPLACE_CONTENT;
+        TrieNode templateNode = rootNode;
+        //index和concurrentPosition是用于当前已过滤文本和当前过滤到的位置的标记
+        int index = 0;//用于标记回滚的位置
+        int concurrentPosition = 0;
+        StringBuilder resultText = new StringBuilder();
+       while (concurrentPosition<text.length()) {
+            char c = text.charAt(concurrentPosition);
+            //首先判断该字是否为特殊文字
+            
+            TrieNode subNode = templateNode.getSubNode(c);
+           if (subNode == null) {
+            //当前遍历的节点并不存在敏感词,结束本次循环
+           }else if (subNode.isKeyWordEnd()) {
+                //如果当前指向的节点为结束节点的话,就将其修改为替代词
+                for (int j = 0; j <= concurrentPosition - index; j++) {
+                    resultText.append(replaceContent);
+                }
+                templateNode = rootNode;
+                index = concurrentPosition;
+                concurrentPosition++;
+            }
+        }
+
 
         return null;
     }
