@@ -67,7 +67,6 @@ public class QuestionController {
             question.setContent(content);
             question.setCreatedDate(new Date());
             if (questionService.addQuestion(question) > 0) {
-
                 //问题添加成功
                 return JSONUtils.getJSONString(0);
             }

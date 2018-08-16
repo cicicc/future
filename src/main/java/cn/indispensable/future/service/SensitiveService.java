@@ -119,7 +119,7 @@ public class SensitiveService implements InitializingBean {
         for (int i = 0; i < lineText.length(); i++) {
             Character c = lineText.charAt(i);
             //如果当前循环到的字符不是中英文字符,那么就跳过这个字符
-            if (!isSymbol(c)) {
+            if (isSymbol(c)) {
                 continue;
             }
             //试图寻找子节点是否包括现在遍历的节点
@@ -147,32 +147,46 @@ public class SensitiveService implements InitializingBean {
         if (StringUtils.isEmpty(text)) {
             return text;
         }
-        String replaceContent = DEFAULT_REPLACE_CONTENT;
         TrieNode templateNode = rootNode;
         //index和concurrentPosition是用于当前已过滤文本和当前过滤到的位置的标记
-        int index = 0;//用于标记回滚的位置
+        int begin = 0;//用于标记回滚的位置
         int concurrentPosition = 0;
         StringBuilder resultText = new StringBuilder();
-       while (concurrentPosition<text.length()) {
+        while (concurrentPosition < text.length()) {
             char c = text.charAt(concurrentPosition);
             //首先判断该字是否为特殊文字
-            
+            if (isSymbol(c)) {
+                if (templateNode == rootNode) {
+                    resultText.append(c);
+                    ++begin;
+                }
+                ++concurrentPosition;
+                continue;
+            }
             TrieNode subNode = templateNode.getSubNode(c);
-           if (subNode == null) {
-            //当前遍历的节点并不存在敏感词,结束本次循环
-           }else if (subNode.isKeyWordEnd()) {
+            if (subNode == null) {
+                //当前遍历的节点并不存在敏感词,结束本位置的查询
+                resultText.append(text.charAt(begin));
+                templateNode = rootNode;
+                begin = begin+1;
+                concurrentPosition = begin;
+            } else if (subNode.isKeyWordEnd()) {
                 //如果当前指向的节点为结束节点的话,就将其修改为替代词
-                for (int j = 0; j <= concurrentPosition - index; j++) {
-                    resultText.append(replaceContent);
+                for (int j = 0; j <= concurrentPosition - begin; j++) {
+                    resultText.append(DEFAULT_REPLACE_CONTENT);
                 }
                 templateNode = rootNode;
-                index = concurrentPosition;
+                begin = concurrentPosition;
+                concurrentPosition++;
+            }else{
+                //当前节点在敏感词中存在并且不是结束节点
+                templateNode = subNode;
                 concurrentPosition++;
             }
         }
 
 
-        return null;
+        return resultText.toString();
     }
 
 }

@@ -35,10 +35,12 @@ public class QuestionService {
 
     private static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
     @Autowired
-    private QuestionDAO questionDao;
+    private QuestionDAO questionDAO;
+    @Autowired
+    private SensitiveService sensitiveService;
 
     public List<Question> selectLatestQuestions(int userId,int offset, int limit){
-        return questionDao.selectLatestQuestions(userId, offset, limit);
+        return questionDAO.selectLatestQuestions(userId, offset, limit);
     }
 
     /**
@@ -48,10 +50,9 @@ public class QuestionService {
      */
     public int addQuestion(Question question) {
         //过滤敏感词
-        question.setTitle(HtmlUtils.htmlEscape(question.getTitle()));
-        question.setContent(HtmlUtils.htmlEscape(question.getContent()));
-
-        return 0;
+        question.setTitle(sensitiveService.filter(HtmlUtils.htmlEscape(question.getTitle())));
+        question.setContent(sensitiveService.filter(HtmlUtils.htmlEscape(question.getContent())));
+        return questionDAO.addQuestion(question);
 
     }
 }
