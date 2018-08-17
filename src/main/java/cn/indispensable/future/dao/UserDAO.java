@@ -1,4 +1,4 @@
-package cn.indispensable.future.DAO;
+package cn.indispensable.future.dao;
 
 import cn.indispensable.future.model.User;
 import org.apache.ibatis.annotations.Insert;

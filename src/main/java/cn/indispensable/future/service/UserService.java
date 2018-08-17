@@ -15,7 +15,7 @@
  */
 package cn.indispensable.future.service;
 
-import cn.indispensable.future.DAO.UserDAO;
+import cn.indispensable.future.dao.UserDAO;
 import cn.indispensable.future.model.User;
 import cn.indispensable.future.utils.MD5Utils;
 import org.slf4j.Logger;

@@ -15,7 +15,7 @@
  */
 package cn.indispensable.future.service;
 
-import cn.indispensable.future.DAO.QuestionDAO;
+import cn.indispensable.future.dao.QuestionDAO;
 import cn.indispensable.future.model.Question;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,5 +54,10 @@ public class QuestionService {
         question.setContent(sensitiveService.filter(HtmlUtils.htmlEscape(question.getContent())));
         return questionDAO.addQuestion(question);
 
+    }
+
+    public Question selectQuestionById(int questionId) {
+
+        return questionDAO.selectQuestionById(questionId);
     }
 }

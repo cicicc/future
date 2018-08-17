@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.indispensable.future.DAO;
+package cn.indispensable.future.dao;
 
 import cn.indispensable.future.model.LoginTicket;
 import org.apache.ibatis.annotations.Insert;

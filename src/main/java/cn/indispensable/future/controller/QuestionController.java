@@ -17,12 +17,15 @@ package cn.indispensable.future.controller;
 
 import cn.indispensable.future.model.HostHolder;
 import cn.indispensable.future.model.Question;
+import cn.indispensable.future.model.ViewObject;
 import cn.indispensable.future.service.QuestionService;
 import cn.indispensable.future.utils.JSONUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -48,7 +51,7 @@ public class QuestionController {
     /**
      * 添加问题
      * @param title 问题的标题
-     * @param content 问题的内容,可不写
+     * @param content 问题的描述,可不写
      * @return ajax加载数据,返回code
      */
     @RequestMapping(path = {"/add"})
@@ -61,7 +64,7 @@ public class QuestionController {
                 question.setUserId(hostHolder.getUser().getId());
             } else {
                 //用户未登录,将跳转至登录页面,一般情况下用户未登录页面是没有提问按钮的
-                return JSONUtils.getJSONString(999);
+                return JSONUtils.getJSONString(999,"请登录");
             }
             question.setTitle(title);
             question.setContent(content);
@@ -73,7 +76,26 @@ public class QuestionController {
         } catch (Exception e) {
             logger.error("添加问题失败"+e.getMessage());
         }
-        //问题添加失败才会在这里返回
         return JSONUtils.getJSONString(1,"问题添加失败,请重试");
+    }
+
+    /**
+     * 从服务器中查询数据并前往该question的详情页面
+     * @param questionId question的id
+     * @return question的详情页面
+     */
+    @RequestMapping("/{questionId}")
+    public String toQuestionDetail(Model model,@PathVariable("questionId")int questionId){
+        Question question = questionService.selectQuestionById(questionId);
+        if (question == null) {
+            //跳转到404页面
+            //************暂时未实现
+            return "redirect:/";
+        }else{
+            ViewObject viewObject = new ViewObject();
+
+            model.addAttribute("viewObject",viewObject);
+        }
+        return "detail";
     }
 }

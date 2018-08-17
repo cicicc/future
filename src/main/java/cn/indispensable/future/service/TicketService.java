@@ -15,7 +15,7 @@
  */
 package cn.indispensable.future.service;
 
-import cn.indispensable.future.DAO.LoginTicketDAO;
+import cn.indispensable.future.dao.LoginTicketDAO;
 import cn.indispensable.future.model.LoginTicket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

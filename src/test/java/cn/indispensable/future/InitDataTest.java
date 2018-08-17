@@ -15,8 +15,8 @@
  */
 package cn.indispensable.future;
 
-import cn.indispensable.future.DAO.QuestionDAO;
-import cn.indispensable.future.DAO.UserDAO;
+import cn.indispensable.future.dao.QuestionDAO;
+import cn.indispensable.future.dao.UserDAO;
 import cn.indispensable.future.model.Question;
 import cn.indispensable.future.model.User;
 import cn.indispensable.future.utils.MD5Utils;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.indispensable.future.DAO;
+package cn.indispensable.future.dao;
 
 import cn.indispensable.future.model.Question;
 import org.apache.ibatis.annotations.Insert;
@@ -36,9 +36,14 @@ public interface QuestionDAO {
     @Insert({"insert into", TABLE_NAME, "(", INSERT_FIELDS, ") values(#{title}, #{content}, #{userId}, #{createdDate}, #{commentCount})"})
     int addQuestion(Question question);
 
-    @Select({"select ",SELECT_FIELDS,"from ",TABLE_NAME})
-    Question selectQuestionById(int QuestionId);
+    @Select({"select ",SELECT_FIELDS,"from ",TABLE_NAME,"where id = #{id}"})
+    Question selectQuestionById(int id);
 
+
+//    @Select({"select",SELECT_FIELDS,"from",TABLE_NAME,"where user_id = #{0} order by id desc limit #{1},#{2}"})
     List<Question> selectLatestQuestions(@Param("userId") int userId, @Param("offset") int offset,
                                          @Param("limit") int limit);
+
+
+
 }
