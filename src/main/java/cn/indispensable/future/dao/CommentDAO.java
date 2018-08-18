@@ -30,13 +30,14 @@ public interface CommentDAO {
     String SELECT_FIELDS = "id, " + INSERT_FIELDS;
 
     @Insert({"insert into", TABLE_NAME, "(", INSERT_FIELDS, ") values(#{content}, #{userId}, #{entityId}, #{entityType}, #{createdDate}, #{status})"})
-    int addQuestion(Comment comment);
+    int addComment(Comment comment);
 
     @Select({"select ",SELECT_FIELDS,"from ",TABLE_NAME})
-    Question selectCommentById(int commentId);
+    Comment selectCommentById(int commentId);
 
-    List<Question> selectLatestComments(@Param("entityId") int userId, @Param("offset") int offset,
-                                         @Param("limit") int limit);
+    @Select({"select",SELECT_FIELDS,"from",TABLE_NAME,"where entity_id = #{entityId} and entity_type = #{entityType} order by id desc limit #{offset},#{limit}"})
+    List<Comment> selectLatestComments(@Param("entityId") int entityId, @Param("entityType")int entityType,
+                                        @Param("offset") int offset, @Param("limit") int limit);
 
 
 

@@ -27,12 +27,14 @@ public class Comment {
     private int id;
     private String content;
     private int userId;
-    private int entityId;
-    private int entityType;
+    private int entityId;// 表示其评论的对象的id
+    private int entityType; //表示其评论的是question还是comment
     private Date createdDate;
-    private int status;
+    private int status; //0 :正常显示 1:逻辑删除
 
     public Comment() {
+        this.createdDate = new Date();
+        this.status = 0;//状态默认为零
     }
 
     public int getId() {

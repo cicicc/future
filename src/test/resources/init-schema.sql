@@ -16,6 +16,7 @@ CREATE TABLE `question` (
     `password` varchar(128) NOT NULL DEFAULT '',
     `salt` varchar(32) NOT NULL DEFAULT '',
     `head_url` varchar(256) NOT NULL DEFAULT '',
+    `self_introduction` varchar(256) NOT NULL DEFAULT '',
     PRIMARY KEY (`id`),
     UNIQUE KEY `name` (`name`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -19,8 +19,6 @@ import cn.indispensable.future.model.Question;
 import cn.indispensable.future.model.User;
 import cn.indispensable.future.model.ViewObject;
 import cn.indispensable.future.service.HomeService;
-import cn.indispensable.future.service.QuestionService;
-import cn.indispensable.future.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

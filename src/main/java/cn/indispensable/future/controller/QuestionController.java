@@ -15,10 +15,10 @@
  */
 package cn.indispensable.future.controller;
 
-import cn.indispensable.future.model.HostHolder;
-import cn.indispensable.future.model.Question;
-import cn.indispensable.future.model.ViewObject;
+import cn.indispensable.future.model.*;
+import cn.indispensable.future.service.CommentService;
 import cn.indispensable.future.service.QuestionService;
+import cn.indispensable.future.service.UserService;
 import cn.indispensable.future.utils.JSONUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 问题的相关处理的controller层
@@ -44,7 +47,13 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
     @Autowired
-    HostHolder hostHolder;
+    private UserService userService;
+    @Autowired
+    private HostHolder hostHolder;
+    @Autowired
+    private CommentService commentService;
+
+
 
 
 
@@ -85,16 +94,29 @@ public class QuestionController {
      * @return question的详情页面
      */
     @RequestMapping("/{questionId}")
-    public String toQuestionDetail(Model model,@PathVariable("questionId")int questionId){
+    public String toQuestionDetail(Model model,@PathVariable("questionId")int questionId) {
         Question question = questionService.selectQuestionById(questionId);
-        if (question == null) {
-            //跳转到404页面
-            //************暂时未实现
-            return "redirect:/";
-        }else{
-            ViewObject viewObject = new ViewObject();
-
-            model.addAttribute("viewObject",viewObject);
+        List<ViewObject> viewObjects = new ArrayList<>();
+        try {
+            if (question == null) {
+                //跳转到404页面
+                //************暂时未实现
+                return "redirect:/";
+            } else {
+                //查询页面所需的用户信息,评论信息,并将其与question信息一同封装到model对象中
+                model.addAttribute("question", question);
+                List<Comment> comments = commentService.SelectLatestComment(questionId, 1, 0, 10);
+                for (Comment comment : comments) {
+                    User user = userService.selectUserById(comment.getUserId());
+                    ViewObject viewObject = new ViewObject();
+                    viewObject.put("comment", comment);
+                    viewObject.put("user", user);
+                    viewObjects.add(viewObject);
+                }
+                model.addAttribute("comments", viewObjects);
+            }
+        } catch (Exception e) {
+            logger.error("查询question出错"+e.getMessage()+ Arrays.toString(e.getStackTrace()));
         }
         return "detail";
     }

@@ -15,10 +15,10 @@ import org.apache.ibatis.annotations.Select;
 public interface UserDAO {
 
     String TABLE_NAME = "user";
-    String INSERT_FIELDS = " name, password, salt, head_url";
+    String INSERT_FIELDS = " name, password, salt, head_url, self_introduction";
     String SELECT_FIELDS = "id," + INSERT_FIELDS;
 
-    @Insert({"insert into", TABLE_NAME, "(", INSERT_FIELDS, ") values(#{name}, #{password}, #{salt}, #{headUrl})"})
+    @Insert({"insert into", TABLE_NAME, "(", INSERT_FIELDS, ") values(#{name}, #{password}, #{salt}, #{headUrl},#{selfIntroduction})"})
     @Options(useGeneratedKeys = true)
     int addUser(User user);
 

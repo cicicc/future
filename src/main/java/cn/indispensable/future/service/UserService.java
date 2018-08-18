@@ -85,4 +85,19 @@ public class UserService {
         userDAO.addUser(user);
         return user;
     }
+
+    /**
+     * 添加用户,包括用户的自我介绍
+     * @return 封装了数据的User对象
+     */
+    public User addUser(String username, String password,String selfIntroduction) {
+        User user = new User();
+        user.setName(username);
+        user.setSelfIntroduction(selfIntroduction);
+        user.setSalt(UUID.randomUUID().toString().replace("-","").substring(0,10));
+        user.setPassword(MD5Utils.MD5(password+user.getSalt()));
+        user.setHeadUrl(String.format("http://images.nowcoder.com/head/%dt.png", new Random().nextInt(1000)));
+        userDAO.addUser(user);
+        return user;
+    }
 }
