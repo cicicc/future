@@ -32,26 +32,13 @@ public class CommentService {
     @Autowired
     private CommentDAO commentDAO;
 
-    /**
-     * CREATE TABLE `comment` (
-     * `id` int(11) NOT NULL AUTO_INCREMENT,
-     * `content` text NOT NULL,
-     * `user_id` int(11) NOT NULL,
-     * `entity_id` int(11) NOT NULL,
-     * `entity_type` int(11) NOT NULL,
-     * `created_date` datetime NOT NULL,
-     * `status` int(11) NOT NULL DEFAULT '0',
-     * PRIMARY KEY (`id`),
-     * KEY `entity_index` (`entity_id`,`entity_type`)
-     * ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-     */
 
     public List<Comment> SelectLatestComment(int entityId, int entityType, int offset, int limit) {
 
         return commentDAO.selectLatestComments(entityId, entityType, offset, limit);
     }
     public int addComment(Comment comment) {
-
+        commentDAO.addComment(comment);
         return commentDAO.addComment(comment);
     }
 

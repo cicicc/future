@@ -19,6 +19,7 @@ import cn.indispensable.future.model.Comment;
 import cn.indispensable.future.model.EntityType;
 import cn.indispensable.future.model.HostHolder;
 import cn.indispensable.future.service.CommentService;
+import cn.indispensable.future.service.QuestionService;
 import cn.indispensable.future.utils.JSONUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,8 @@ public class CommentController {
     private HostHolder hostHolder;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private QuestionService questionService;
 
     /**
      * 添加评论
@@ -67,11 +70,14 @@ public class CommentController {
                 comment.setEntityType(EntityType.ENTITY_QUESTION);
                 if (commentService.addComment(comment) <= 0) {
                     throw new Exception();
+                }else{
+                    //更新question中的评论数
+                    questionService.incrCommentCountById(questionId);
                 }
             }
         } catch (Exception e) {
             logger.error("添加评论失败" + e.getMessage());
-            return JSONUtils.getJSONString(1, "添加评论出错");
+//            return JSONUtils.getJSONString(1, "添加评论出错");
         }
 //        return JSONUtils.getJSONString(0);
         return "redirect:/question/" + String.valueOf(questionId);

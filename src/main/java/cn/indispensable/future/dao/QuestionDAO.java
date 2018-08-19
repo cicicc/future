@@ -16,10 +16,8 @@
 package cn.indispensable.future.dao;
 
 import cn.indispensable.future.model.Question;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
+
 import java.util.List;
 
 /**
@@ -44,6 +42,7 @@ public interface QuestionDAO {
     List<Question> selectLatestQuestions(@Param("userId") int userId, @Param("offset") int offset,
                                          @Param("limit") int limit);
 
-
+    @Update({"update question set comment_count = comment_count+1 where id = #{id}"})
+    void incrCommentCountById(@Param("id") int id);
 
 }
