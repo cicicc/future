@@ -34,14 +34,24 @@ public interface MessageDAO {
     int addMessage(Message message);
 
     @Select({"select ",SELECT_FIELDS,"from ",TABLE_NAME,"where id = #{id}"})
-    Question selectMessageById(int id);
+    Message selectMessageById(int id);
 
-    @Select({"select ",SELECT_FIELDS,"from ",TABLE_NAME,"where Conversatio_id = #{ConversationId}"})
-    Question selectMessageByConversationId(@Param("conversationId") int conversationId);
+    @Select({"select ",SELECT_FIELDS,"from ",TABLE_NAME,"where conversation_id = #{conversationId} "})
+    List<Message> selectMessageByConversationId(@Param("conversationId") String conversationId);
 
     @Select({"select",SELECT_FIELDS,"from",TABLE_NAME,"where conversation_id = #{conversation_id} order by id desc limit #{offset},#{limit}"})
-    List<Message> selectLatestMessages(@Param("conversationId") int conversationId, @Param("offset") int offset,
-                                       @Param("limit") int limit);
+    List<Message> selectLatestMessages(@Param("conversationId") int conversationId, @Param("offset") int offset, @Param("limit") int limit);
 
+    //最终SQL: select from_id, to_id, content, created_date, has_read, conversation_id ,count(id) as id from ( select * from  message
+    //   where from_id=22 or to_id=22 order by id desc) tt group by conversation_id  order by created_date desc limit 0,10
+    @Select({"select ", INSERT_FIELDS, " ,count(id) as id from ( select * from ", TABLE_NAME,
+            " where from_id=#{userId} or to_id=#{userId} order by id desc) tt group by conversation_id  order by created_date desc limit #{offset}, #{limit}"})
+    List<Message> getConversationList(@Param("userId") int userId,
+                                      @Param("offset") int offset, @Param("limit") int limit);
 
+    @Select({"select count(id) from", TABLE_NAME, " where has_read = 0 and to_id = #{toId} and conversation_id =#{conversationId}"})
+    int getUnreadMessageCount(@Param("toId") int toId, @Param("conversationId") String ConversationId);
+
+    @Update({"update ", TABLE_NAME, "set has_read = 1 where id=#{id}"})
+    void updateHasReadStatu(@Param("id") int id);
 }

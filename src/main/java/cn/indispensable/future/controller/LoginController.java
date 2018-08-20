@@ -122,14 +122,14 @@ public class LoginController {
             return "/register";
         }else{
             //判断用户名是否被占用
-            Map<String, Object> map = userService.selectUserByName(username);
-            if (map.containsKey("msg")) {
+            User user = userService.selectUserByName(username);
+            if (user!=null) {
                 //用户名已经存在
-                model.addAttribute("msg", map.get("msg"));
+                model.addAttribute("msg", "此用户名已经被占用");
                 return "/register";
             } else {
-               User user = userService.addUser (username, password);
-                addTicket(user, rememberme, response);
+               User newUser = userService.addUser (username, password);
+                addTicket(newUser, rememberme, response);
                 if (next != null) {
                     //这里应该对next进行判断,因为在一般的情况下我们并不希望用户提交的next路径是非本站的
                     //因为这样的话,如果有人设置了链接指向自己的网站的话,就可以直接获取到我们用户的cookie信息了

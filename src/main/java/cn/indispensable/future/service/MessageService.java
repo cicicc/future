@@ -15,7 +15,11 @@
  */
 package cn.indispensable.future.service;
 
+import cn.indispensable.future.dao.MessageDAO;
+import cn.indispensable.future.model.Message;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 /**
  * @author cicicc
@@ -23,4 +27,64 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MessageService {
+    @Autowired
+    private MessageDAO messageDAO;
+
+    /**
+     * 根据message的id获取message对象
+     * @param id message的id
+     * @return message对象,没有则为null
+     */
+    public Message getMessageById(int id){
+        return messageDAO.selectMessageById(id);
+    }
+
+    /**
+     * 根据message的id获取message对象
+     * @param conversationId message的conversationId
+     * @return message对象列表,没有则为null
+     */
+    public List<Message> getMessageByConversationId(String conversationId){
+        return messageDAO.selectMessageByConversationId(conversationId);
+    }
+
+    /**
+     * 添加消息
+     * @return 是否添加成功(影响的数据数目)
+     */
+    public int addMessage(Message message) {
+
+        return messageDAO.addMessage(message);
+    }
+
+    /**
+     * 查询用户最近的会话列表
+     * @param userId 用户id
+     * @param offset 偏移量
+     * @param limit 读取条数
+     * @return List<Message>
+     */
+    public List<Message> getConversationList(int userId, int offset, int limit){
+
+        return messageDAO.getConversationList(userId, offset, limit);
+    }
+
+    /**
+     * 获取未读信息的数目
+     * @param toId 当前用户id,只有发送给当前用户的信息才用计算未读数目
+     * @param conversationId 用户会话的id
+     * @return 未读信息数目
+     */
+    public int getUnreadMessageCount(int toId, String conversationId){
+
+        return messageDAO.getUnreadMessageCount(toId, conversationId);
+    }
+
+    /**
+     * 根据信息的id更改其状态为已读(DAO层将has_read设置为1)
+     * @param id message的id
+     */
+    public void updateHasReadStatu(int id) {
+        messageDAO.updateHasReadStatu(id);
+    }
 }

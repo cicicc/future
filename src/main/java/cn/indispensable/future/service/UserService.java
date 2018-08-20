@@ -62,14 +62,12 @@ public class UserService {
      * @param username 用户姓名
      * @return  Map<String,Object>
      */
-    public Map<String,Object> selectUserByName(String username) {
-        Map<String, Object> map = new HashMap<>();
+    public User selectUserByName(String username) {
         User user = userDAO.selectUserByName(username);
         if (user != null) {
-            //返回页面用户名已经被占用的信息
-            map.put("msg", "此用户名已被占用");
+            return user;
         }
-        return map;
+        return null;
     }
 
     /**

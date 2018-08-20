@@ -84,14 +84,21 @@ public class Message {
     }
 
     public String getConversationId() {
-        if (fromId < toId) {
-            return String.format("%d_%d", fromId, toId);
+        if (conversationId == null) {
+            return initConversationId();
+        }else {
+            return this.conversationId;
         }
-        return String.format("%d_%d", toId, fromId);
     }
     public void setConversationId(String conversationId) {
         this.conversationId = conversationId;
     }
 
+    private String initConversationId() {
+        if (fromId < toId) {
+            return String.format("%d_%d", fromId, toId);
+        }
+        return String.format("%d_%d", toId, fromId);
+    }
 
 }
