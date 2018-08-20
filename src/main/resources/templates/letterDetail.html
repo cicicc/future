@@ -3,7 +3,7 @@
       class="is-AppPromotionBarVisible cssanimations csstransforms csstransitions flexbox no-touchevents no-mobile">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>私信详情列表 - - 逼乎</title>
+    <title>私信详情列表 -${targetUser.name} - 逼乎</title>
     <meta name="viewport"
           content="width=device-width, minimum-scale=1.0, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="keywords" content="">
@@ -65,6 +65,23 @@
                 </li>
             #end
         </ul>
+        <form action="/msg/addMessage" method="post">
+            <input type="hidden" name="toName" value="$!{targetUser.name}"/>
+            <input type="hidden" name="inConversation" value="true"/>
+            <div id="zh-question-answer-form-wrap" class="zh-question-answer-form-wrap">
+                <div class="zm-editable-editor-wrap" style="">
+                    <div class="zm-editable-editor-outer">
+                        <div class="zm-editable-editor-field-wrap">
+                            <textarea name="content" id="content" class="zm-editable-editor-field-element editable" style="width:100%;"></textarea>
+                        </div>
+                    </div>
+                    <div class="zm-command clearfix">
+                            <span class=" zg-right">
+                                <button type="submit" class="submit-button zg-btn-blue">回复私信</button></span>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
     <script type="text/javascript">
         $(function () {

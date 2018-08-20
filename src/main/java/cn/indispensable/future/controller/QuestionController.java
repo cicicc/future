@@ -17,6 +17,7 @@ package cn.indispensable.future.controller;
 
 import cn.indispensable.future.model.*;
 import cn.indispensable.future.service.CommentService;
+import cn.indispensable.future.service.LikeService;
 import cn.indispensable.future.service.QuestionService;
 import cn.indispensable.future.service.UserService;
 import cn.indispensable.future.utils.JSONUtils;
@@ -52,10 +53,8 @@ public class QuestionController {
     private HostHolder hostHolder;
     @Autowired
     private CommentService commentService;
-
-
-
-
+    @Autowired
+    private LikeService likeService;
 
     /**
      * 添加问题
@@ -99,11 +98,9 @@ public class QuestionController {
         List<ViewObject> viewObjects = new ArrayList<>();
         try {
             if (question == null) {
-                //跳转到404页面
-                //************暂时未实现
-                return "redirect:/";
+                throw new Exception();
             } else {
-                //查询页面所需的用户信息,评论信息,并将其与question信息一同封装到model对象中
+                //查询页面所需的用户信息,评论信息,点赞数目并将其与question信息一同封装到model对象中
                 model.addAttribute("question", question);
                 List<Comment> comments = commentService.SelectLatestComment(questionId, 1, 0, 10);
                 for (Comment comment : comments) {
@@ -111,12 +108,14 @@ public class QuestionController {
                     ViewObject viewObject = new ViewObject();
                     viewObject.put("comment", comment);
                     viewObject.put("user", user);
+                    viewObject.put("likeCount", likeService.getLikeCount(EntityType.ENTITY_COMMENT,comment.getId()));
+                    viewObject.put("likeStatus", likeService.getLikeStatus(hostHolder.getUser().getId(), EntityType.ENTITY_COMMENT, comment.getId()));
                     viewObjects.add(viewObject);
                 }
                 model.addAttribute("comments", viewObjects);
             }
         } catch (Exception e) {
-            logger.error("查询question出错"+e.getMessage()+ Arrays.toString(e.getStackTrace()));
+            logger.error("查询question出错"+ Arrays.toString(e.getStackTrace()) + Arrays.toString(e.getStackTrace()));
         }
         return "detail";
     }

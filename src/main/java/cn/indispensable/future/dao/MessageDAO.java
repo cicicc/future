@@ -1,7 +1,6 @@
 package cn.indispensable.future.dao;
 
 import cn.indispensable.future.model.Message;
-import cn.indispensable.future.model.Question;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -53,5 +52,5 @@ public interface MessageDAO {
     int getUnreadMessageCount(@Param("toId") int toId, @Param("conversationId") String ConversationId);
 
     @Update({"update ", TABLE_NAME, "set has_read = 1 where id=#{id}"})
-    void updateHasReadStatu(@Param("id") int id);
+    void updateHasReadStatus(@Param("id") int id);
 }

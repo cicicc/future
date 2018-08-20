@@ -35,10 +35,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author cicicc
@@ -90,12 +90,12 @@ public class MessageController {
      * 添加消息
      * @param toName 接收者姓名
      * @param content 发送的文本内容
-     * @param request 获取请求路径的request请求
-     * @return
+     * @return 私信列表页面
      */
     @RequestMapping(value = "/addMessage",method = RequestMethod.POST)
     @ResponseBody
-    public String addMessage(@RequestParam("toName")String toName, @RequestParam("content")String content, HttpServletRequest request){
+    public String addMessage(@RequestParam("toName")String toName, @RequestParam("content")String content,
+                             @RequestParam(value = "inConversation",defaultValue = "false")boolean inConversation, HttpServletResponse response){
         try {
             if (hostHolder.getUser() == null) {
                 return JSONUtils.getJSONString(999);
@@ -112,6 +112,11 @@ public class MessageController {
                 message.setConversationId(message.getConversationId());
                 message.setCreatedDate(new Date());
                 messageService.addMessage(message);
+                //判断所处页面是否为私信的详情列表
+                if (inConversation){
+                    //这个实际应该是在前端进行处理的,指定特定的状态码
+                    response.sendRedirect("/msg/detail?conversationId="+message.getConversationId());
+                }
                 return JSONUtils.getJSONString(0);
 
             }
@@ -132,8 +137,8 @@ public class MessageController {
                 User targetUser = userService.selectUserById(targetId);
                 //更新私信的状态
                 for (Message message : messages) {
-                    if (message.getHasRead() == 0) {
-                        messageService.updateHasReadStatu(message.getId());
+                    if (message.getToId() == currentUser.getId() && message.getHasRead() == 0) {
+                        messageService.updateHasReadStatus(message.getId());
                     }
                 }
                 model.addAttribute("targetUser", targetUser);

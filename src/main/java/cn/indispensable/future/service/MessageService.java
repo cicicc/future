@@ -84,7 +84,7 @@ public class MessageService {
      * 根据信息的id更改其状态为已读(DAO层将has_read设置为1)
      * @param id message的id
      */
-    public void updateHasReadStatu(int id) {
-        messageDAO.updateHasReadStatu(id);
+    public void updateHasReadStatus(int id) {
+        messageDAO.updateHasReadStatus(id);
     }
 }
