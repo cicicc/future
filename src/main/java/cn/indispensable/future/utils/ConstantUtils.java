@@ -16,26 +16,11 @@
 package cn.indispensable.future.utils;
 
 /**
- * 作为Redis各自的key的工具类
+ * 常量的工具类
  * @author cicicc
  * @since 0.0.1
  */
-public class RedisKeyUtils {
-
-    private static final String SPLIT = ":";
-    private static final String BIZ_LIKE = "LIKE";
-    private static final String BIZ_DISLIKE = "DISLIKE";
-    private static final String BIZ_EVENTQUEUE = "EVENT_QUEUE";
-
-    public static String getLikeKey(int entityType, int entityId) {
-        return BIZ_LIKE + entityType + SPLIT + entityId;
-    }
-
-    public static String getDislikeKey(int entityType, int entityId) {
-        return BIZ_DISLIKE + entityType + SPLIT + entityId;
-    }
-    public static String getEventQueueKey() {
-        return BIZ_EVENTQUEUE;
-    }
+public class ConstantUtils {
+    public static final int SYSTEM_ADMIN_ID = 3;
 
 }

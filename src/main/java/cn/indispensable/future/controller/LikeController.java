@@ -15,9 +15,14 @@
  */
 package cn.indispensable.future.controller;
 
+import cn.indispensable.future.async.EventModel;
+import cn.indispensable.future.async.EventProducer;
+import cn.indispensable.future.async.EventType;
+import cn.indispensable.future.model.Comment;
 import cn.indispensable.future.model.EntityType;
 import cn.indispensable.future.model.HostHolder;
 import cn.indispensable.future.model.User;
+import cn.indispensable.future.service.CommentService;
 import cn.indispensable.future.service.LikeService;
 import cn.indispensable.future.utils.JSONUtils;
 import org.slf4j.Logger;
@@ -39,6 +44,10 @@ public class LikeController {
     private HostHolder hostHolder;
     @Autowired
     private LikeService likeService;
+    @Autowired
+    private EventProducer eventProducer;
+    @Autowired
+    private CommentService commentService;
     private static final Logger logger = LoggerFactory.getLogger(LikeController.class);
 
 
@@ -51,10 +60,15 @@ public class LikeController {
                 return JSONUtils.getJSONString(999);
             }
             Long likeCount = likeService.addLike(currentUser.getId(), EntityType.ENTITY_COMMENT, commentId);
+            Comment comment = commentService.selectCommentById(commentId);
+            eventProducer.fireEvent(new EventModel().setActorId(hostHolder.getUser().getId())
+                    .setEntityType(EntityType.ENTITY_COMMENT).setType(EventType.LIKE)
+                    .setEntityOwnerId(comment.getUserId()).setEntityId(commentId)
+                    .addExt("questionId", String.valueOf(comment.getEntityId())));
             return JSONUtils.getJSONString(0, String.valueOf(likeCount));
         } catch (Exception e) {
             logger.error("喜欢答案出错"+e.getMessage());
-            return JSONUtils.getJSONString(1, "喜欢此答案出错");
+            return JSONUtils.getJSONString(1, "赞同此答案出错");
         }
     }
 

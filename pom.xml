@@ -70,6 +70,12 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
+        <!--使用邮件工具-->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.5.0-b01</version>
+        </dependency>
     </dependencies>
     <build>
         <resources>

@@ -37,6 +37,12 @@ public class CommentService {
 
         return commentDAO.selectLatestComments(entityId, entityType, offset, limit);
     }
+
+    public Comment selectCommentById(int id) {
+
+        return commentDAO.selectCommentById(id);
+    }
+
     public int addComment(Comment comment) {
         return commentDAO.addComment(comment);
     }

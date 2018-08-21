@@ -13,29 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.indispensable.future.utils;
+package cn.indispensable.future.async.handles;
+
+import cn.indispensable.future.async.EventHandler;
+import cn.indispensable.future.async.EventModel;
+import cn.indispensable.future.async.EventType;
+
+import java.util.List;
 
 /**
- * 作为Redis各自的key的工具类
  * @author cicicc
  * @since 0.0.1
  */
-public class RedisKeyUtils {
-
-    private static final String SPLIT = ":";
-    private static final String BIZ_LIKE = "LIKE";
-    private static final String BIZ_DISLIKE = "DISLIKE";
-    private static final String BIZ_EVENTQUEUE = "EVENT_QUEUE";
-
-    public static String getLikeKey(int entityType, int entityId) {
-        return BIZ_LIKE + entityType + SPLIT + entityId;
+public class LoginHandler implements EventHandler {
+    @Override
+    public void doHandle(EventModel model) {
+        
     }
 
-    public static String getDislikeKey(int entityType, int entityId) {
-        return BIZ_DISLIKE + entityType + SPLIT + entityId;
+    @Override
+    public List<EventType> getSupportEventTypes() {
+        return null;
     }
-    public static String getEventQueueKey() {
-        return BIZ_EVENTQUEUE;
-    }
-
 }

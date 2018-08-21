@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.indispensable.future.utils;
+package cn.indispensable.future.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,14 +22,16 @@ import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.util.List;
+
 /**
  * jedis工具类
  * @author cicicc
  * @since 0.0.1
  */
 @Service
-public class JedisUtils implements InitializingBean {
-    private final static Logger logger = LoggerFactory.getLogger(JedisUtils.class);
+public class JedisService implements InitializingBean {
+    private final static Logger logger = LoggerFactory.getLogger(JedisService.class);
     private JedisPool jedisPool;
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -95,6 +97,36 @@ public class JedisUtils implements InitializingBean {
         }
         return false;
     }
+    public void lpush(String key,String value) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            jedis.lpush(key, value);
+        } catch (Exception e) {
+            logger.error("添加失败"+e.getMessage());
+        }finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
+    public  List<String> brpop(String key) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.brpop(0, key);
+        } catch (Exception e) {
+            logger.error("取出队列数据出现错误"+e.getMessage());
+        }finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return null;
+    }
+
+
 
     public static void main(String[] args) {
         Jedis jedis = new Jedis("redis://localhost:6379/6");

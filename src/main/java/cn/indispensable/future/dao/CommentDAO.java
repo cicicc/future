@@ -32,8 +32,8 @@ public interface CommentDAO {
     @Insert({"insert into", TABLE_NAME, "(", INSERT_FIELDS, ") values(#{content}, #{userId}, #{entityId}, #{entityType}, #{createdDate}, #{status})"})
     int addComment(Comment comment);
 
-    @Select({"select ",SELECT_FIELDS,"from ",TABLE_NAME})
-    Comment selectCommentById(int commentId);
+    @Select({"select ",SELECT_FIELDS,"from ",TABLE_NAME, "where id =#{id} "})
+    Comment selectCommentById(@Param("id")int id);
 
     @Select({"select",SELECT_FIELDS,"from",TABLE_NAME,"where entity_id = #{entityId} and entity_type = #{entityType} order by id desc limit #{offset},#{limit}"})
     List<Comment> selectLatestComments(@Param("entityId") int entityId, @Param("entityType")int entityType,

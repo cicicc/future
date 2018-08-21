@@ -15,11 +15,9 @@
  */
 package cn.indispensable.future.service;
 
-import cn.indispensable.future.utils.JedisUtils;
 import cn.indispensable.future.utils.RedisKeyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import redis.clients.jedis.Jedis;
 
 /**
  * 点赞的service层
@@ -29,7 +27,7 @@ import redis.clients.jedis.Jedis;
 @Service
 public class LikeService {
     @Autowired
-    private JedisUtils jedisUtils;
+    private JedisService jedisUtils;
 
     /**
      * 对某回答表示喜欢
