@@ -109,7 +109,11 @@ public class QuestionController {
                     viewObject.put("comment", comment);
                     viewObject.put("user", user);
                     viewObject.put("likeCount", likeService.getLikeCount(EntityType.ENTITY_COMMENT,comment.getId()));
-                    viewObject.put("likeStatus", likeService.getLikeStatus(hostHolder.getUser().getId(), EntityType.ENTITY_COMMENT, comment.getId()));
+                    if (hostHolder.getUser() == null) {
+                        viewObject.put("likeStatus", "0");
+                    }else {
+                        viewObject.put("likeStatus", likeService.getLikeStatus(hostHolder.getUser().getId(), EntityType.ENTITY_COMMENT, comment.getId()));
+                    }
                     viewObjects.add(viewObject);
                 }
                 model.addAttribute("comments", viewObjects);

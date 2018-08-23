@@ -21,7 +21,9 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Transaction;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -124,6 +126,62 @@ public class JedisService implements InitializingBean {
             }
         }
         return null;
+    }
+
+    public  Jedis getResource() {
+        try {
+            return jedisPool.getResource();
+        } catch (Exception e) {
+            logger.error("获取jedis实例失败"+e.getMessage());
+        }
+        return null;
+    }
+
+
+    public  Transaction beginTransaction(Jedis jedis) {
+        try {
+            return jedis.multi();
+        } catch (Exception e) {
+            logger.error("获取jedis实例失败"+e.getMessage());
+        }
+        return null;
+    }
+
+    public List<Object> exec(Transaction tx, Jedis jedis) {
+        try {
+            return tx.exec();
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+            tx.discard();
+        } finally {
+            if (tx != null) {
+                try {
+                    tx.close();
+                } catch (IOException ioe) {
+                    logger.error("事务关闭出错"+ioe.getMessage());
+                }
+            }
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return null;
+    }
+
+
+    public  Long zadd(String key,double score,String value) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.zadd(key, score, value);
+        } catch (Exception e) {
+            logger.error("取出队列数据出现错误"+e.getMessage());
+        }finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return 0L;
     }
 
 
