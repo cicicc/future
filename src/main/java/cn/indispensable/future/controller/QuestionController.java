@@ -16,10 +16,7 @@
 package cn.indispensable.future.controller;
 
 import cn.indispensable.future.model.*;
-import cn.indispensable.future.service.CommentService;
-import cn.indispensable.future.service.LikeService;
-import cn.indispensable.future.service.QuestionService;
-import cn.indispensable.future.service.UserService;
+import cn.indispensable.future.service.*;
 import cn.indispensable.future.utils.JSONUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +52,8 @@ public class QuestionController {
     private CommentService commentService;
     @Autowired
     private LikeService likeService;
+    @Autowired
+    private FollowService followService;
 
     /**
      * 添加问题
@@ -96,6 +95,7 @@ public class QuestionController {
     public String toQuestionDetail(Model model,@PathVariable("questionId")int questionId) {
         Question question = questionService.selectQuestionById(questionId);
         List<ViewObject> viewObjects = new ArrayList<>();
+        User currentLoginUser = hostHolder.getUser();
         try {
             if (question == null) {
                 throw new Exception();
@@ -109,10 +109,19 @@ public class QuestionController {
                     viewObject.put("comment", comment);
                     viewObject.put("user", user);
                     viewObject.put("likeCount", likeService.getLikeCount(EntityType.ENTITY_COMMENT,comment.getId()));
-                    if (hostHolder.getUser() == null) {
+                    List<Integer> followerUserId = followService.getFollowers(EntityType.ENTITY_QUESTION, questionId, 0, 50);
+                    List<User> users = new ArrayList<>();
+                    for (Integer userId : followerUserId) {
+                        User userById = userService.selectUserById(userId);
+                        users.add(userById);
+                    }
+                    model.addAttribute("followUsers", users);
+                    if (currentLoginUser == null) {
                         viewObject.put("likeStatus", "0");
+                        model.addAttribute("followed", false);
                     }else {
-                        viewObject.put("likeStatus", likeService.getLikeStatus(hostHolder.getUser().getId(), EntityType.ENTITY_COMMENT, comment.getId()));
+                        viewObject.put("likeStatus", likeService.getLikeStatus(currentLoginUser.getId(), EntityType.ENTITY_COMMENT, comment.getId()));
+                        model.addAttribute("followed", followService.isFollower(currentLoginUser.getId(), EntityType.ENTITY_QUESTION, questionId));
                     }
                     viewObjects.add(viewObject);
                 }

@@ -5,6 +5,9 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -30,4 +33,7 @@ public interface UserDAO {
 
     @Select({"select ",SELECT_FIELDS,"from ",TABLE_NAME,"where name=#{name}"})
     User selectUserByName(String name);
+
+    @Select({"select " ,SELECT_FIELDS, "from ", TABLE_NAME,"order by id desc limit 0, #{count}" })
+    List<User> getUsers(int count);
 }

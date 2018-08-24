@@ -65,7 +65,7 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware 
             @Override
             public void run() {
                 while(true) {
-                    System.out.println("hello");
+//                    System.out.println("hello");
                     String key = RedisKeyUtils.getEventQueueKey();
                     List<String> events = jedisService.brpop(key);
                     if (events==null){

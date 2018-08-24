@@ -17,6 +17,8 @@ package cn.indispensable.future.utils;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.Map;
+
 /**
  * json工具类,对阿里巴巴的fastJSON进行包装
  * @author cicicc
@@ -36,6 +38,17 @@ public class JSONUtils {
         return json.toJSONString();
     }
 
+    /**
+     * 接收map作为传输给前端的数据
+     */
+    public static String getJSONString(int code, Map<String, Object> map) {
+        JSONObject json = new JSONObject();
+        json.put("code", code);
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            json.put(entry.getKey(), entry.getValue());
+        }
+        return json.toJSONString();
+    }
     /**
      * @param code 编号常用的为0和999,如果为999那么表示未登录,将会跳转到登录页面,如果是0的话就是添加成功,
      * @return json格式的数据,返回给页面

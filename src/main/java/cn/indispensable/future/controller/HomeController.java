@@ -15,10 +15,10 @@
  */
 package cn.indispensable.future.controller;
 
-import cn.indispensable.future.model.Question;
-import cn.indispensable.future.model.User;
-import cn.indispensable.future.model.ViewObject;
+import cn.indispensable.future.model.*;
+import cn.indispensable.future.service.FollowService;
 import cn.indispensable.future.service.HomeService;
+import cn.indispensable.future.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +38,13 @@ public class HomeController {
 
     @Autowired
     private HomeService homeService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private FollowService followService;
+    @Autowired
+    private HostHolder hostHolder;
+
 
     /**
      * 首页的代码实现 默认向用户推荐十条数据
@@ -60,8 +67,32 @@ public class HomeController {
     @RequestMapping(path = {"/user/{userId}"})
     public String index(Model model, @PathVariable("userId")int userId){
         List<ViewObject> viewObjects = obtainQuestions(userId, 0, 10);
+        List<ViewObject> profileUsers = new ArrayList<>();
+        User currentLoginUser = hostHolder.getUser();
+        List<Integer> followees = followService.getFollowees(userId, EntityType.ENTITY_USER, 0, 15);
+        for (Integer id : followees) {
+            User user = userService.selectUserById(id);
+            //判断Redis中所存储的这个用户id是否仍旧存在于数据库中
+            if (user != null) {
+                ViewObject viewObject = new ViewObject();
+                //判断当前登录的用户是否关注了该用户,如果当前用户未登录的话,直接设置为未关注
+                if (currentLoginUser != null) {
+                    viewObject.put("followed", followService.isFollower(currentLoginUser.getId(), EntityType.ENTITY_USER, user.getId()));
+                }else{
+                    //未登录状态下,用户点击关注会跳转到登录页面
+                    viewObject.put("followed", false);
+                }
+                viewObject.put("user",user);
+                viewObject.put("followerCount",followService.getFollowerCount(EntityType.ENTITY_USER, user.getId()));
+                viewObject.put("followeeCount",followService.getFolloweeCount(user.getId(), EntityType.ENTITY_USER));
+                profileUsers.add(viewObject);
+            }else{
+                continue;
+            }
+        }
+        model.addAttribute("profileUsers", profileUsers);
         model.addAttribute("viewObjects", viewObjects);
-        return "index";
+        return "profile";
     }
 
     /**

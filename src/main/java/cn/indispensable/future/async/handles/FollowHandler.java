@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package cn.indispensable.future.async.handles;
+
+import cn.indispensable.future.async.EventConsumer;
 import cn.indispensable.future.async.EventHandler;
 import cn.indispensable.future.async.EventModel;
 import cn.indispensable.future.async.EventType;
@@ -32,14 +34,13 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 当用户点击了赞同某一回答的时候,给该回答的答主发送一个站内信
+ * 当用户关注问题时,
  * @author cicicc
  * @since 0.0.1
  */
 @Component
-public class LikeHandler implements EventHandler {
-
-    private static final Logger logger = LoggerFactory.getLogger(LikeHandler.class);
+public class FollowHandler implements EventHandler {
+    private static final Logger logger = LoggerFactory.getLogger(FollowHandler.class);
 
     @Autowired
     private UserService userService;
@@ -56,7 +57,7 @@ public class LikeHandler implements EventHandler {
             message.setToId(model.getEntityOwnerId());
             message.setConversationId(message.getConversationId());
             message.setHasRead(0);
-            message.setContent("您好,用户" + user.getName() + "赞了您于" + "http://127.0.0.1:8080/question/" + model.getExt("questionId") + "问题下的答案");
+            message.setContent("您好,用户<a href = \"/user/"+user.getId()+"\">" + user.getName() + "</a>关注了您" );
             messageService.addMessage(message);
         } catch (Exception e) {
             logger.error("站内信发送出现错误"+e.getMessage());
@@ -65,6 +66,6 @@ public class LikeHandler implements EventHandler {
 
     @Override
     public List<EventType> getSupportEventTypes() {
-        return Arrays.asList(EventType.LIKE);
+        return Arrays.asList(EventType.FOLLOW);
     }
 }

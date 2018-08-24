@@ -23,10 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * user的service层 作为controller层和dao层的交互媒介 提供相关的服务
@@ -97,5 +94,9 @@ public class UserService {
         user.setHeadUrl(String.format("http://images.nowcoder.com/head/%dt.png", new Random().nextInt(1000)));
         userDAO.addUser(user);
         return user;
+    }
+
+    public List<User> getUsers(int count) {
+        return userDAO.getUsers(count);
     }
 }
