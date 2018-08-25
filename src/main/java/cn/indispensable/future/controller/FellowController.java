@@ -120,7 +120,7 @@ public class FellowController {
             }else{
                 boolean result = followService.unFollow(user.getId(), EntityType.ENTITY_QUESTION, questionId);
                 // 返回关注的人数
-                return JSONUtils.getJSONString(result ? 0 : 1, String.valueOf(followService.getFollowerCount(hostHolder.getUser().getId(), EntityType.ENTITY_QUESTION)));
+                return JSONUtils.getJSONString(result ? 0 : 1, String.valueOf(followService.getFollowerCount(EntityType.ENTITY_QUESTION, questionId)));
             }
         } catch (Exception e) {
             logger.error("取消关注问题出错"+e.getMessage());
@@ -161,7 +161,7 @@ public class FellowController {
             }else{
                 boolean result = followService.unFollow(user.getId(), EntityType.ENTITY_USER, userId);
                 // 返回关注的人数
-                return JSONUtils.getJSONString(result ? 0 : 1, String.valueOf(followService.getFolloweeCount(hostHolder.getUser().getId(), EntityType.ENTITY_USER)));
+                return JSONUtils.getJSONString(result ? 0 : 1, String.valueOf(followService.getFollowerCount(EntityType.ENTITY_USER, hostHolder.getUser().getId())));
             }
         } catch (Exception e) {
             logger.error("取消关注用户出错"+e.getMessage());
@@ -175,7 +175,25 @@ public class FellowController {
         List<Integer> followers = followService.getFollowers(EntityType.ENTITY_USER, userId, 0, 15);
         model.addAttribute("followerCount", followService.getFollowerCount(EntityType.ENTITY_USER, userId));
         User currentLoginUser = hostHolder.getUser();
-        for (Integer id : followers) {
+        putValue2Model(viewObjects, followers, currentLoginUser);
+        model.addAttribute("followers", viewObjects);
+        return "followers";
+
+    }
+    @RequestMapping("/user/{userId}/followees")
+    public String getFollowees(Model model, @PathVariable("userId")int userId) {
+        List<ViewObject> viewObjects = new ArrayList<>();
+        List<Integer> followees = followService.getFollowees(userId , EntityType.ENTITY_USER,  0, 15);
+        model.addAttribute("followerCount", followService.getFollowerCount(EntityType.ENTITY_USER, userId));
+        User currentLoginUser = hostHolder.getUser();
+        putValue2Model(viewObjects, followees, currentLoginUser);
+        model.addAttribute("followees", viewObjects);
+        return "followees";
+
+    }
+
+    private void putValue2Model(List<ViewObject> viewObjects, List<Integer> followees, User currentLoginUser) {
+        for (Integer id : followees) {
             User user = userService.selectUserById(id);
             if (user == null) {
                 continue;
@@ -189,13 +207,10 @@ public class FellowController {
                 viewObject.put("followerCount", followService.getFollowerCount( EntityType.ENTITY_USER, user.getId()));
                 viewObject.put("followeeCount", followService.getFolloweeCount(user.getId(), EntityType.ENTITY_USER));
                 viewObject.put("user", user);
-//              viewObject.put("commentCount", followService.getFolloweeCount(user.getId(), EntityType.ENTITY_USER));
+                //  viewObject.put("commentCount", followService.getFolloweeCount(user.getId(), EntityType.ENTITY_USER));
                 viewObjects.add(viewObject);
             }
         }
-        model.addAttribute("followers", viewObjects);
-        return "followers";
-
     }
 
 

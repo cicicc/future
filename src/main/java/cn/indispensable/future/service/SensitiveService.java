@@ -48,28 +48,24 @@ public class SensitiveService implements InitializingBean {
         private boolean end = false;
         //该敏感字下的子节点
         private Map<Character, TrieNode> subNodes = new HashMap<>();
-
         //添加子节点
         void addSubNode(Character key, TrieNode node) {
             subNodes.put(key, node);
         }
-
         //查询当前指向的节点下面是否有key值为所查询值的子节点
         TrieNode getSubNode(Character key) {
             return subNodes.get(key);
         }
-
         //判断是否为敏感词结尾
         boolean isKeyWordEnd() {
             return end;
         }
-
         //将当前的节点对应字设置为敏感词结尾或者设置为非敏感词结尾
         void setKeyWordEnd(Boolean end) {
             this.end = end;
         }
         //获取当前节点的子节点数目
-         int getSubNodeCount() {
+        int getSubNodeCount() {
             return subNodes.size();
         }
 
@@ -176,7 +172,7 @@ public class SensitiveService implements InitializingBean {
                     resultText.append(DEFAULT_REPLACE_CONTENT);
                 }
                 templateNode = rootNode;
-                begin = concurrentPosition;
+                begin = concurrentPosition + 1;
                 concurrentPosition++;
             }else{
                 //当前节点在敏感词中存在并且不是结束节点

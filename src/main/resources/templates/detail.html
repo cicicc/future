@@ -8,7 +8,7 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-ZA-Response-Id" content="4b3ad1bf1e8045f1a016c31f5fbb40c8">
     <title>$!{question.title} - 逼乎</title>
-    <meta name="apple-itunes-app" content="app-id=432274380, app-argument=nowcoder://questions/36301524">
+    <meta name="apple-itunes-app" content="app-id=432274380, app-argument=/questions/36301524">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="mobile-agent" content="format=html5;url=">
     <meta id="znonce" name="znonce" content="8d61d9c6697d4080ab36aa3bdb21b9d8">
@@ -52,7 +52,7 @@
         <div class="zu-main-content-inner">
             <meta itemprop="isTopQuestion" content="false">
             <meta itemprop="visitsCount" content="402">
-            <!--
+
             <div class="zm-tag-editor zg-section">
                 <div class="zm-tag-editor-labels zg-clear">
                     <a data-tip="t$b$19550730" class="zm-item-tag" href="">新浪微博</a>
@@ -64,7 +64,7 @@
                         <i class="zu-edit-button-icon"></i>修改</a>
                 </div>
             </div>
-            -->
+
             <div id="zh-question-title" data-editable="true" class="zm-editable-status-normal">
                 <h2 class="zm-item-title">
 
@@ -92,7 +92,7 @@
                             <a href="javascript:void(0);"><strong class="js-user-count">$!{followUsers.size()}</strong></a>人关注该问题
                         </div>
                         <div class="list zu-small-avatar-list zg-clear js-user-list">
-                            #foreach($vo in $followUsers)
+                            #foreach($!vo in $!followUsers)
                             <a class="zm-item-link-avatar js-user-${vo.id}" href="/user/${vo.id}"
                                data-original_title="${vo.name}">
                                 <img src="${vo.headUrl}"
@@ -106,7 +106,7 @@
                  data-widget="navigable"
                  data-navigable-options="{&quot;items&quot;: &quot;&gt;.zm-item-answer&quot;}"
                  data-init="{&quot;params&quot;: {&quot;url_token&quot;: 36301524, &quot;pagesize&quot;: 10, &quot;offset&quot;: 0}, &quot;nodename&quot;: &quot;QuestionAnswerListV2&quot;}">
-                #foreach($commentInfo in $comments)
+                #foreach($!commentInfo in $!comments)
                 <div tabindex="-1" class="zm-item-answer  zm-item-expanded js-comment" itemprop="topAnswer" itemscope=""
                      itemtype="http://schema.org/Answer" data-aid="22162611" data-atoken="66862039"
                      data-collapsed="0" data-created="1444310527" data-deleted="0" data-helpful="1" data-isowner="0"
@@ -140,7 +140,7 @@
                             <a class="zm-item-link-avatar avatar-link" href="" target="_blank"
                                data-tip="p$t$yingxiaodao">
                                 <img src="$!{commentInfo.user.headUrl}" class="zm-list-avatar avatar"></a>
-                            <a class="author-link" data-tip="p$t$yingxiaodao" target="_blank" href="">$!{commentInfo.user.name}</a>
+                            <a class="author-link" data-tip="p$t$yingxiaodao" target="_blank" href="/user/${commentInfo.user.id}">$!{commentInfo.user.name}</a>
                             <span title="#!{commentInfo.user.selfIntroduction}" class="bio">$!{commentInfo.user.selfIntroduction}</span>
                         </div>
                         <div class="zm-item-vote-info" data-votecount="$!{commentInfo.likeCount}" data-za-module="VoteInfo">

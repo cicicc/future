@@ -19,6 +19,7 @@ import cn.indispensable.future.dao.CommentDAO;
 import cn.indispensable.future.model.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
@@ -31,6 +32,8 @@ import java.util.List;
 public class CommentService {
     @Autowired
     private CommentDAO commentDAO;
+    @Autowired
+    private SensitiveService sensitiveService;
 
 
     public List<Comment> SelectLatestComment(int entityId, int entityType, int offset, int limit) {
@@ -44,6 +47,7 @@ public class CommentService {
     }
 
     public int addComment(Comment comment) {
+        comment.setContent(sensitiveService.filter(HtmlUtils.htmlEscape(comment.getContent())));
         return commentDAO.addComment(comment);
     }
 

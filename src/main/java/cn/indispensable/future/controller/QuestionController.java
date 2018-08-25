@@ -103,32 +103,38 @@ public class QuestionController {
                 //查询页面所需的用户信息,评论信息,点赞数目并将其与question信息一同封装到model对象中
                 model.addAttribute("question", question);
                 List<Comment> comments = commentService.SelectLatestComment(questionId, 1, 0, 10);
+                List<Integer> followerUserId = followService.getFollowers(EntityType.ENTITY_QUESTION, questionId, 0, 50);
+                //添加问题的评论信息到model中
                 for (Comment comment : comments) {
                     User user = userService.selectUserById(comment.getUserId());
                     ViewObject viewObject = new ViewObject();
                     viewObject.put("comment", comment);
                     viewObject.put("user", user);
                     viewObject.put("likeCount", likeService.getLikeCount(EntityType.ENTITY_COMMENT,comment.getId()));
-                    List<Integer> followerUserId = followService.getFollowers(EntityType.ENTITY_QUESTION, questionId, 0, 50);
-                    List<User> users = new ArrayList<>();
-                    for (Integer userId : followerUserId) {
-                        User userById = userService.selectUserById(userId);
-                        users.add(userById);
-                    }
-                    model.addAttribute("followUsers", users);
                     if (currentLoginUser == null) {
                         viewObject.put("likeStatus", "0");
-                        model.addAttribute("followed", false);
                     }else {
                         viewObject.put("likeStatus", likeService.getLikeStatus(currentLoginUser.getId(), EntityType.ENTITY_COMMENT, comment.getId()));
-                        model.addAttribute("followed", followService.isFollower(currentLoginUser.getId(), EntityType.ENTITY_QUESTION, questionId));
                     }
                     viewObjects.add(viewObject);
                 }
                 model.addAttribute("comments", viewObjects);
+                //添加问题的关注者们的信息到model中
+                List<User> users = new ArrayList<>();
+                for (Integer userId : followerUserId) {
+                    User userById = userService.selectUserById(userId);
+                    users.add(userById);
+                }
+                if (currentLoginUser == null) {
+                    model.addAttribute("followed", false);
+                }else {
+                    model.addAttribute("followed", followService.isFollower(currentLoginUser.getId(), EntityType.ENTITY_QUESTION, questionId));
+                }
+                model.addAttribute("followUsers", users);
             }
         } catch (Exception e) {
             logger.error("查询question出错"+ Arrays.toString(e.getStackTrace()) + Arrays.toString(e.getStackTrace()));
+            return "redirect:/error";
         }
         return "detail";
     }

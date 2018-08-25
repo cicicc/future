@@ -54,6 +54,7 @@ public class HomeController {
     @RequestMapping(path = {"/","index"})
     public String index(Model model){
         List<ViewObject> viewObjects = obtainQuestions(0, 0, 10);
+
         model.addAttribute("viewObjects", viewObjects);
         return "index";
     }
@@ -110,8 +111,10 @@ public class HomeController {
             ViewObject viewObject = new ViewObject();
             viewObject.put("question", question);
             viewObject.put("user", user);
+                viewObject.put("followerCount", followService.getFollowerCount(EntityType.ENTITY_QUESTION, question.getId()));
             viewObjects.add(viewObject);
         }
         return viewObjects;
     }
+
 }
