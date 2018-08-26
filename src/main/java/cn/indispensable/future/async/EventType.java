@@ -6,7 +6,8 @@ public enum EventType {
     LOGIN(2),
     MAIL(3),
     unFOLLOW(4),
-    FOLLOW(5);
+    FOLLOW(5),
+    FEED(6);
 
     private int value;
 

@@ -42,7 +42,7 @@
         <button class="zu-top-add-question" id="zu-top-add-question">提问</button>
         #end
         <div role="search" id="zh-top-search" class="zu-top-search">
-            <form method="GET" action="https://nowcoder.com/search" id="zh-top-search-form" class="zu-top-search-form">
+            <form method="GET" action="/search" id="zh-top-search-form" class="zu-top-search-form">
                 <input type="hidden" name="type" value="content">
                 <label for="q" class="hide-text">逼乎搜索</label><input type="text" class="zu-top-search-input" id="q" name="q" autocomplete="off" value="" placeholder="搜索你感兴趣的内容..." role="combobox" aria-autocomplete="list">
                 <button type="submit" class="zu-top-search-button"><span class="hide-text">搜索</span><span class="sprite-global-icon-magnifier-dark"></span></button>
@@ -58,7 +58,7 @@
                 </li>
                 #if ($user)
                 <li class="top-nav-noti zu-top-nav-li ">
-                    <a class="zu-top-nav-link" href="#" id="zh-top-nav-count-wrap" role="button"><span class="mobi-arrow"></span>消息<span id="zh-top-nav-count" class="zu-top-nav-count zg-noti-number" style="display: none;">0</span></a>
+                    <a class="zu-top-nav-link" href="#" id="zh-top-nav-count-wrap" role="button"><span class="mobi-arrow"></span>发私信<span id="zh-top-nav-count" class="zu-top-nav-count zg-noti-number" style="display: none;">0</span></a>
                 </li>
                 #end
             </ul>

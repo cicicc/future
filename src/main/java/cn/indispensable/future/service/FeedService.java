@@ -15,40 +15,33 @@
  */
 package cn.indispensable.future.service;
 
-import cn.indispensable.future.dao.CommentDAO;
-import cn.indispensable.future.model.Comment;
+import cn.indispensable.future.dao.FeedDAO;
+import cn.indispensable.future.model.Feed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
 /**
- * 处理评论中心的数据,并将包装好的数据返回给controller层
+ * 新鲜事的服务层,
  * @author cicicc
  * @since 0.0.1
  */
 @Service
-public class CommentService {
+public class FeedService {
     @Autowired
-    private CommentDAO commentDAO;
-    @Autowired
-    private SensitiveService sensitiveService;
+    private FeedDAO feedDAO;
 
 
-    public List<Comment> SelectLatestComment(int entityId, int entityType, int offset, int limit) {
-
-        return commentDAO.selectLatestComments(entityId, entityType, offset, limit);
+    public Feed getFeedById(int id) {
+        return feedDAO.selectFeedById(id);
     }
 
-    public Comment selectCommentById(int id) {
-
-        return commentDAO.selectCommentById(id);
+    public List<Feed> getUserFeeds(int maxValue, List<Integer> followeeIds, int count) {
+        return feedDAO.selectUserFeeds(maxValue, followeeIds, count);
     }
 
-    public int addComment(Comment comment) {
-        comment.setContent(sensitiveService.filter(HtmlUtils.htmlEscape(comment.getContent())));
-        return commentDAO.addComment(comment);
+    public int addFeed(Feed feed) {
+        return feedDAO.addFeed(feed);
     }
-
 }

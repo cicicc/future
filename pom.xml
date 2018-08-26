@@ -6,7 +6,7 @@
 	<groupId>cn.indispensable</groupId>
 	<artifactId>future</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>future</name>
 	<description>一个仿照知乎书写的项目--逼乎,来到这里,和世界分享你刚编的故事吧!</description>

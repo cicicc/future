@@ -260,10 +260,20 @@ public class JedisService implements InitializingBean {
         return 0;
     }
 
-    public static void main(String[] args) {
-        Jedis jedis = new Jedis("redis://localhost:6379/6");
-        jedis.append("name", "oldchen");
-        System.out.println(jedis.get("name"));
-        jedis.close();
+
+    public List<String> lrange(String key, int start, int end) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.lrange(key, start, end);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return null;
+
     }
 }

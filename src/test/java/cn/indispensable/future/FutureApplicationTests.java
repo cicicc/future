@@ -48,6 +48,7 @@ public class FutureApplicationTests {
 		}
 	}
 
+	//测试用的评论数据,无需查看
 	private String getCommentContent(int i) {
 		ArrayList<String> list = new ArrayList<>();
 		list.add("7月29号下午在大悦城的金逸影院看的点映，和朋友刚跨出院门，就听到耳边响起议论声，“好多《功夫熊猫》的影子”，“不只是功夫熊猫，还有很多其他片子，感觉像是大杂烩”，“是有借鉴，但感觉又不一样，可能是导演功力不够，做的三不像”，“感觉还不错，虽然有似曾相识的故事情节”……\n" +

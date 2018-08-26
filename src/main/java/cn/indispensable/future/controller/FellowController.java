@@ -17,11 +17,10 @@ package cn.indispensable.future.controller;
 
 import cn.indispensable.future.async.EventModel;
 import cn.indispensable.future.async.EventProducer;
-import cn.indispensable.future.model.EntityType;
-import cn.indispensable.future.model.HostHolder;
-import cn.indispensable.future.model.User;
-import cn.indispensable.future.model.ViewObject;
+import cn.indispensable.future.async.EventType;
+import cn.indispensable.future.model.*;
 import cn.indispensable.future.service.FollowService;
+import cn.indispensable.future.service.QuestionService;
 import cn.indispensable.future.service.UserService;
 import cn.indispensable.future.utils.JSONUtils;
 import org.slf4j.Logger;
@@ -45,6 +44,8 @@ import java.util.Map;
 public class FellowController {
     @Autowired
     private FollowService followService;
+    @Autowired
+    private EventProducer eventProducer;
     @Autowired
     private HostHolder hostHolder;
     @Autowired
@@ -87,11 +88,15 @@ public class FellowController {
     public String followQuestion(@RequestParam("questionId")int questionId) {
         try {
             User user = hostHolder.getUser();
+
             if (user == null) {
                 return JSONUtils.getJSONString(999);
             }else {
                 boolean follow = followService.follow(user.getId(), EntityType.ENTITY_QUESTION, questionId);
-//                new EventProducer().fireEvent(new EventModel());
+                //用户关注问题后将该情况加入新鲜事中
+                eventProducer.fireEvent(new EventModel().setActorId(hostHolder.getUser().getId())
+                        .setEntityType(EntityType.ENTITY_QUESTION).setType(EventType.FEED)
+                        .setEntityId(questionId));
                 Map<String, Object> info = new HashMap<>();
                 info.put("headUrl", hostHolder.getUser().getHeadUrl());
                 info.put("name", hostHolder.getUser().getName());
