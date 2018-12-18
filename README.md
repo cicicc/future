@@ -21,20 +21,20 @@
 
 1）实现了简单的登录与注册功能，并作出了部分权限的控制，比如未登录用户不可提问、点赞点踩等。
 示意图1:未登录用户进行点赞或关注问题等操作时会自动跳转至登陆页面,成功登录以后会回到之前页面.
-![](http://pcg4drw32.bkt.clouddn.com/%E6%9C%AA%E7%99%BB%E5%BD%95%E6%97%A0%E6%B3%95%E7%82%B9%E8%B5%9E.gif)
+![](http://qiniuyun.indispensable.cn/%E6%9C%AA%E7%99%BB%E5%BD%95%E6%97%A0%E6%B3%95%E7%82%B9%E8%B5%9E.gif)
 
 2）使用前缀树算法实现对用户提交文本的过滤，可有效的对用户提交的非法关键字以及脚本代码进行过滤。
 示意图2:当用户输入敏感词时,会进行过滤.该过滤可以对用户私信,提问,回答进行过滤
-![](http://pcg4drw32.bkt.clouddn.com/%E6%95%8F%E6%84%9F%E8%AF%8D%E8%BF%87%E6%BB%A4.gif)
+![](http://qiniuyun.indispensable.cn/%E6%95%8F%E6%84%9F%E8%AF%8D%E8%BF%87%E6%BB%A4.gif)
 
 
 3）使用Redis完成赞和踩以及关注等功能，在高速缓存中的数据存取使得响应速度更加快速。
 示意图3:登陆以后的用户可以进行赞踩以及关注问题:
-![](http://pcg4drw32.bkt.clouddn.com/%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B8%A9%E4%BB%A5%E5%8F%8A%E5%85%B3%E6%B3%A8%E9%97%AE%E9%A2%98.gif)
+![](http://qiniuyun.indispensable.cn/%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B8%A9%E4%BB%A5%E5%8F%8A%E5%85%B3%E6%B3%A8%E9%97%AE%E9%A2%98.gif)
 
 
 4）为了能够更快的对用户的请求进行响应，使用生产者消费者模式以及redis实现了一个简单的异步框架。该框架会自动加载实现了EventHandler接口的handler们，并动态选择对应的handler处理请求。
-![异步框架结构图](http://pcg4drw32.bkt.clouddn.com//file/2018/08/bda94d8fdced4c7896e7fe05eab5776b_image.png) 
+![异步框架结构图](http://qiniuyun.indispensable.cn/file/2018/08/bda94d8fdced4c7896e7fe05eab5776b_image.png) 
 详情代码可看`async`包下代码
 >[异步包代码地址](https://github.com/cicicc/future/tree/master/src/main/java/cn/indispensable/future/async)
 
@@ -43,10 +43,10 @@
 
 6) 实现了评论中心和站内信功能，用户可以对问题和他人的回答作出评论,也可以通过私信和其他用户交流,为用户之间的交流搭建起了桥梁。
 示意图4:用户可以对用户的问题和回答作出回复:
-![](http://pcg4drw32.bkt.clouddn.com/%E5%9B%9E%E5%A4%8D%E9%97%AE%E9%A2%98.gif)
+![](http://qiniuyun.indispensable.cn/%E5%9B%9E%E5%A4%8D%E9%97%AE%E9%A2%98.gif)
 
 示意图5:用户之间私信进行交流:
-![](http://pcg4drw32.bkt.clouddn.com/%E7%A7%81%E4%BF%A1%E7%9A%84%E6%94%B6%E5%8F%91.gif)
+![](http://qiniuyun.indispensable.cn/%E7%A7%81%E4%BF%A1%E7%9A%84%E6%94%B6%E5%8F%91.gif)
 
 7) 使用solr实现了搜索功能，用户可以对站内的问题以及回答进行搜索。
 
